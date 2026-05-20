@@ -1,16 +1,52 @@
-const chartGrid = document.getElementById("chartGrid");
-const subCategories = document.getElementById("subCategories");
-const learnersSection = document.getElementById("learnersSection");
-const modal = document.getElementById("imageModal");
-const modalImage = document.getElementById("modalImage");
-const closeModal = document.getElementById("closeModal");
-const lastUpdated = document.getElementById("lastUpdated");
+const chartGrid =
+    document.getElementById("chartGrid");
+
+const subCategories =
+    document.getElementById("subCategories");
+
+const learnersSection =
+    document.getElementById("learnersSection");
+
+const modal =
+    document.getElementById("imageModal");
+
+const modalImage =
+    document.getElementById("modalImage");
+
+const closeModal =
+    document.getElementById("closeModal");
+
+const lastUpdated =
+    document.getElementById("lastUpdated");
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const loadMoreBtn =
+    document.getElementById("loadMoreBtn");
+
+const footerCount =
+    document.getElementById("footerCount");
 
 let scannersData = {};
+
 let currentCategory = "swing";
+
 let currentScanner = null;
+
 let currentImages = [];
+
+let filteredImages = [];
+
 let currentImageIndex = 0;
+
+let visibleCount = 20;
+
+const LOAD_STEP = 20;
+
+/* =========================================
+   INITIAL LOAD
+========================================= */
 
 async function loadScanners() {
 
@@ -27,6 +63,10 @@ async function loadScanners() {
     loadLastUpdated();
 }
 
+/* =========================================
+   MAIN TABS
+========================================= */
+
 function setupMainTabs() {
 
     const tabs =
@@ -39,19 +79,23 @@ function setupMainTabs() {
             function() {
 
                 tabs.forEach(function(t) {
+
                     t.classList.remove("active");
                 });
 
                 tab.classList.add("active");
 
-                const category =
-                    tab.dataset.category;
-
-                showCategory(category);
+                showCategory(
+                    tab.dataset.category
+                );
             }
         );
     });
 }
+
+/* =========================================
+   CATEGORY
+========================================= */
 
 function showCategory(category) {
 
@@ -61,11 +105,15 @@ function showCategory(category) {
 
     subCategories.innerHTML = "";
 
+    searchInput.value = "";
+
     if (category === "learn") {
 
         learnersSection.classList.add("visible");
 
         chartGrid.classList.add("hidden");
+
+        loadMoreBtn.classList.add("hidden");
 
         return;
     }
@@ -82,16 +130,10 @@ function showCategory(category) {
         const button =
             document.createElement("button");
 
-        if (category === "wyckoff") {
-
-            button.className =
-                "sub-tile wyckoff";
-        }
-        else {
-
-            button.className =
-                "sub-tile";
-        }
+        button.className =
+            category === "wyckoff"
+                ? "sub-tile wyckoff"
+                : "sub-tile";
 
         button.innerHTML =
             scanner.name +
@@ -107,9 +149,7 @@ function showCategory(category) {
                     .querySelectorAll(".sub-tile")
                     .forEach(function(tile) {
 
-                        tile.classList.remove(
-                            "active"
-                        );
+                        tile.classList.remove("active");
                     });
 
                 button.classList.add("active");
@@ -121,46 +161,43 @@ function showCategory(category) {
         subCategories.appendChild(button);
     });
 
+    let defaultScanner;
+
     if (category === "swing") {
 
-        const defaultScanner =
-            scanners.find(function(s) {
+        defaultScanner =
+            scanners.find(
+                s => s.id === "confluence"
+            ) || scanners[0];
+    }
+    else {
 
-                return s.id === "confluence";
-            }) || scanners[0];
-
-        subCategories
-            .children[
-                scanners.indexOf(defaultScanner)
-            ]
-            .classList.add("active");
-
-        loadCharts(defaultScanner);
+        defaultScanner =
+            scanners.find(
+                s => s.id === "ranking"
+            ) || scanners[0];
     }
 
-    if (category === "wyckoff") {
+    subCategories
+        .children[
+            scanners.indexOf(defaultScanner)
+        ]
+        .classList.add("active");
 
-        const defaultScanner =
-            scanners.find(function(s) {
-
-                return s.id === "ranking";
-            }) || scanners[0];
-
-        subCategories
-            .children[
-                scanners.indexOf(defaultScanner)
-            ]
-            .classList.add("active");
-
-        loadCharts(defaultScanner);
-    }
+    loadCharts(defaultScanner);
 }
+
+/* =========================================
+   LOAD CHARTS
+========================================= */
 
 async function loadCharts(scanner) {
 
     currentScanner = scanner;
 
     chartGrid.innerHTML = "";
+
+    visibleCount = LOAD_STEP;
 
     try {
 
@@ -174,80 +211,10 @@ async function loadCharts(scanner) {
 
         currentImages = pngs;
 
-        if (!pngs.length) {
+        filteredImages = [...pngs];
 
-            chartGrid.innerHTML =
-                '<p class="no-charts">No charts available.</p>';
+        renderCharts();
 
-            return;
-        }
-
-        pngs.forEach(function(png, index) {
-
-            const card =
-                document.createElement("div");
-
-            card.className =
-                "chart-card";
-
-            const symbol =
-                png.replace(".png", "");
-
-            const imagePath =
-                scanner.path + "/" + png;
-
-            card.innerHTML =
-
-                '<div class="chart-image-wrapper">' +
-
-                '<img ' +
-                'src="' + imagePath + '" ' +
-                'alt="' + symbol + '" ' +
-                'class="chart-image">' +
-
-                '<a ' +
-                'href="https://www.tradingview.com/chart/?symbol=NSE:' +
-                symbol +
-                '" ' +
-                'target="_blank" ' +
-                'class="tv-link">' +
-
-                '<img ' +
-                'src="icons/tradingview.png" ' +
-                'class="tv-icon">' +
-
-                '</a>' +
-
-                '</div>' +
-
-                '<div class="chart-info">' +
-
-                '<h3>' +
-                symbol +
-                '</h3>' +
-
-                '<p>' +
-                scanner.name +
-                '</p>' +
-
-                '</div>';
-
-            card.addEventListener(
-                "click",
-                function(e) {
-
-                    if (
-                        e.target.closest(".tv-link")
-                    ) {
-                        return;
-                    }
-
-                    openModal(index);
-                }
-            );
-
-            chartGrid.appendChild(card);
-        });
     }
 
     catch (error) {
@@ -258,6 +225,186 @@ async function loadCharts(scanner) {
             '<p class="no-charts">Failed to load charts.</p>';
     }
 }
+
+/* =========================================
+   RENDER
+========================================= */
+
+function renderCharts() {
+
+    chartGrid.innerHTML = "";
+
+    const visibleCharts =
+        filteredImages.slice(
+            0,
+            visibleCount
+        );
+
+    if (!visibleCharts.length) {
+
+        chartGrid.innerHTML =
+            '<p class="no-charts">No charts found.</p>';
+
+        loadMoreBtn.classList.add("hidden");
+
+        return;
+    }
+
+    visibleCharts.forEach(function(png, index) {
+
+        const symbol =
+            png.replace(".png", "");
+
+        const imagePath =
+            currentScanner.path +
+            "/" +
+            png;
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "chart-card";
+
+        card.innerHTML =
+
+            '<div class="chart-image-wrapper">' +
+
+            '<img ' +
+            'src="' + imagePath + '" ' +
+            'loading="lazy" ' +
+            'alt="' + symbol + '" ' +
+            'class="chart-image">' +
+
+            '<a ' +
+            'href="https://www.tradingview.com/chart/?symbol=NSE:' +
+            symbol +
+            '" ' +
+            'target="_blank" ' +
+            'class="tv-link">' +
+
+            '<img ' +
+            'src="icons/tradingview.png" ' +
+            'class="tv-icon">' +
+
+            '</a>' +
+
+            '</div>' +
+
+            '<div class="chart-info">' +
+
+            '<h3>' +
+            symbol +
+            '</h3>' +
+
+            '<p>' +
+            currentScanner.name +
+            '</p>' +
+
+            '</div>';
+
+        card.addEventListener(
+            "click",
+            function(e) {
+
+                if (
+                    e.target.closest(".tv-link")
+                ) {
+                    return;
+                }
+
+                openModal(index);
+            }
+        );
+
+        chartGrid.appendChild(card);
+    });
+
+    updateFooter();
+
+    if (
+        visibleCount <
+        filteredImages.length
+    ) {
+
+        loadMoreBtn.classList.remove(
+            "hidden"
+        );
+    }
+    else {
+
+        loadMoreBtn.classList.add(
+            "hidden"
+        );
+    }
+}
+
+/* =========================================
+   LOAD MORE
+========================================= */
+
+loadMoreBtn.addEventListener(
+    "click",
+    function() {
+
+        visibleCount += LOAD_STEP;
+
+        renderCharts();
+    }
+);
+
+/* =========================================
+   SEARCH
+========================================= */
+
+searchInput.addEventListener(
+    "input",
+    function(e) {
+
+        const query =
+            e.target.value
+                .trim()
+                .toLowerCase();
+
+        filteredImages =
+            currentImages.filter(function(png) {
+
+                return png
+                    .toLowerCase()
+                    .includes(query);
+            });
+
+        visibleCount = LOAD_STEP;
+
+        renderCharts();
+    }
+);
+
+/* =========================================
+   FOOTER
+========================================= */
+
+function updateFooter() {
+
+    footerCount.innerHTML =
+
+        "Showing " +
+
+        Math.min(
+            visibleCount,
+            filteredImages.length
+        ) +
+
+        " of " +
+
+        filteredImages.length +
+
+        " charts";
+}
+
+/* =========================================
+   MODAL
+========================================= */
 
 function openModal(index) {
 
@@ -271,24 +418,21 @@ function openModal(index) {
 function updateModalImage() {
 
     const image =
-        currentImages[currentImageIndex];
+        filteredImages[currentImageIndex];
 
     modalImage.src =
-        currentScanner.path + "/" + image;
+        currentScanner.path +
+        "/" +
+        image;
 
     renderModalArrows();
 }
 
 function renderModalArrows() {
 
-    const oldArrows =
-        document.querySelectorAll(
-            ".modal-arrow"
-        );
-
-    oldArrows.forEach(function(a) {
-        a.remove();
-    });
+    document
+        .querySelectorAll(".modal-arrow")
+        .forEach(a => a.remove());
 
     if (currentImageIndex > 0) {
 
@@ -317,7 +461,7 @@ function renderModalArrows() {
 
     if (
         currentImageIndex <
-        currentImages.length - 1
+        filteredImages.length - 1
     ) {
 
         const rightArrow =
@@ -344,6 +488,10 @@ function renderModalArrows() {
     }
 }
 
+/* =========================================
+   CLOSE MODAL
+========================================= */
+
 closeModal.addEventListener(
     "click",
     function() {
@@ -363,6 +511,10 @@ modal.addEventListener(
     }
 );
 
+/* =========================================
+   KEYBOARD
+========================================= */
+
 window.addEventListener(
     "keydown",
     function(e) {
@@ -376,7 +528,7 @@ window.addEventListener(
         if (
             e.key === "ArrowRight" &&
             currentImageIndex <
-            currentImages.length - 1
+            filteredImages.length - 1
         ) {
 
             currentImageIndex++;
@@ -401,7 +553,12 @@ window.addEventListener(
     }
 );
 
+/* =========================================
+   TOUCH
+========================================= */
+
 let touchStartX = 0;
+
 let touchEndX = 0;
 
 modal.addEventListener(
@@ -424,7 +581,7 @@ modal.addEventListener(
             touchEndX <
             touchStartX - 50 &&
             currentImageIndex <
-            currentImages.length - 1
+            filteredImages.length - 1
         ) {
 
             currentImageIndex++;
@@ -445,6 +602,10 @@ modal.addEventListener(
     }
 );
 
+/* =========================================
+   LAST UPDATED
+========================================= */
+
 async function loadLastUpdated() {
 
     try {
@@ -458,14 +619,13 @@ async function loadLastUpdated() {
             await response.json();
 
         lastUpdated.innerHTML =
-            "Last Updated: " +
             data.last_updated;
     }
 
     catch {
 
         lastUpdated.innerHTML =
-            "Last Updated: Unknown";
+            "Unknown";
     }
 }
 

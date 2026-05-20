@@ -39,58 +39,85 @@
 
     </header>
 
-<!-- ========================================= -->
-<!-- STICKY NAVIGATION -->
-<!-- ========================================= -->
-
-<div id="stickyNav">
-
     <!-- ========================================= -->
-    <!-- MAIN CATEGORY ROW -->
+    <!-- STICKY NAV -->
     <!-- ========================================= -->
 
-    <section class="main-categories">
+    <div id="stickyNav">
 
-        <button
-            class="main-tab active"
-            data-category="swing"
+        <!-- MAIN TABS -->
+
+        <section class="main-categories">
+
+            <button
+                class="main-tab active"
+                data-category="swing"
+            >
+                SWING SCANNER
+            </button>
+
+            <button
+                class="main-tab wyckoff-tab"
+                data-category="wyckoff"
+            >
+                WYCKOFF SCANNER
+
+                <span class="experimental">
+                    Experimental
+                </span>
+            </button>
+
+            <button
+                class="main-tab"
+                data-category="learn"
+            >
+                LEARNERS CORNER
+            </button>
+
+        </section>
+
+        <!-- SUB TABS -->
+
+        <section
+            id="subCategories"
+            class="sub-categories"
         >
-            SWING SCANNER
-        </button>
-
-        <button
-            class="main-tab wyckoff-tab"
-            data-category="wyckoff"
-        >
-            WYCKOFF SCANNER
-            <span class="experimental">
-                Experimental
-            </span>
-        </button>
-
-        <button
-            class="main-tab"
-            data-category="learn"
-        >
-            LEARNERS CORNER
-        </button>
-
-    </section>
-
-    <!-- ========================================= -->
-    <!-- SUB CATEGORY ROW -->
-    <!-- ========================================= -->
-
-    <section
-        id="subCategories"
-        class="sub-categories"
-    >
-    </section>
+        </section>
 
     </div>
 
     <!-- ========================================= -->
-    <!-- LEARNERS SECTION -->
+    <!-- TOOLBAR -->
+    <!-- ========================================= -->
+
+    <section class="toolbar">
+
+        <div class="last-updated-box">
+
+            <span class="update-label">
+                Last Updated
+            </span>
+
+            <span id="lastUpdated">
+                Loading...
+            </span>
+
+        </div>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search charts (e.g. RELIANCE, HDFCBANK)"
+            >
+
+        </div>
+
+    </section>
+
+    <!-- ========================================= -->
+    <!-- LEARNERS -->
     <!-- ========================================= -->
 
     <section
@@ -99,18 +126,20 @@
     >
 
         <div class="learn-card">
+
             <h2>
                 Learn Swing Strategies
             </h2>
 
             <p>
                 Momentum, breakout,
-                pullback and trend
-                continuation concepts.
+                pullback and trend continuation.
             </p>
+
         </div>
 
         <div class="learn-card">
+
             <h2>
                 Learn Wyckoff Trading
             </h2>
@@ -119,22 +148,22 @@
                 Accumulation,
                 distribution,
                 springs,
-                tests,
                 SOS and Phase analysis.
             </p>
+
         </div>
 
         <div class="learn-card">
+
             <h2>
-                Shariah Trading &
-                Investing
+                Shariah Investing
             </h2>
 
             <p>
                 Ethical investing,
-                halal screening and
-                long-term frameworks.
+                halal screening and long-term frameworks.
             </p>
+
         </div>
 
     </section>
@@ -147,6 +176,21 @@
         id="chartGrid"
         class="chart-grid"
     >
+    </section>
+
+    <!-- ========================================= -->
+    <!-- LOAD MORE -->
+    <!-- ========================================= -->
+
+    <section class="load-more-wrapper">
+
+        <button
+            id="loadMoreBtn"
+            class="load-more-btn hidden"
+        >
+            Load More
+        </button>
+
     </section>
 
     <!-- ========================================= -->
@@ -179,8 +223,8 @@
 
     <footer class="footer">
 
-        <p id="lastUpdated">
-            Loading...
+        <p id="footerCount">
+            Ready
         </p>
 
     </footer>
