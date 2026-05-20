@@ -22,11 +22,13 @@ const lastUpdated =
 const searchInput =
     document.getElementById("searchInput");
 
-const loadMoreBtn =
-    document.getElementById("loadMoreBtn");
-
 const footerCount =
     document.getElementById("footerCount");
+
+const paginationWrapper =
+    document.getElementById(
+        "paginationWrapper"
+    );
 
 let scannersData = {};
 
@@ -40,9 +42,9 @@ let filteredImages = [];
 
 let currentImageIndex = 0;
 
-let visibleCount = 20;
+let currentPage = 1;
 
-const LOAD_STEP = 20;
+const CHARTS_PER_PAGE = 20;
 
 /* =========================================
    INITIAL LOAD
@@ -107,13 +109,17 @@ function showCategory(category) {
 
     searchInput.value = "";
 
+    paginationWrapper.innerHTML = "";
+
     if (category === "learn") {
 
         learnersSection.classList.add("visible");
 
         chartGrid.classList.add("hidden");
 
-        loadMoreBtn.classList.add("hidden");
+        paginationWrapper.classList.add(
+            "hidden"
+        );
 
         return;
     }
@@ -121,6 +127,10 @@ function showCategory(category) {
     learnersSection.classList.remove("visible");
 
     chartGrid.classList.remove("hidden");
+
+    paginationWrapper.classList.remove(
+        "hidden"
+    );
 
     const scanners =
         scannersData[category];
@@ -149,7 +159,9 @@ function showCategory(category) {
                     .querySelectorAll(".sub-tile")
                     .forEach(function(tile) {
 
-                        tile.classList.remove("active");
+                        tile.classList.remove(
+                            "active"
+                        );
                     });
 
                 button.classList.add("active");
@@ -195,9 +207,7 @@ async function loadCharts(scanner) {
 
     currentScanner = scanner;
 
-    chartGrid.innerHTML = "";
-
-    visibleCount = LOAD_STEP;
+    currentPage = 1;
 
     try {
 
@@ -215,6 +225,7 @@ async function loadCharts(scanner) {
 
         renderCharts();
 
+        renderPagination();
     }
 
     catch (error) {
@@ -227,25 +238,27 @@ async function loadCharts(scanner) {
 }
 
 /* =========================================
-   RENDER
+   RENDER CHARTS
 ========================================= */
 
 function renderCharts() {
 
     chartGrid.innerHTML = "";
 
+    const start =
+        (currentPage - 1) *
+        CHARTS_PER_PAGE;
+
+    const end =
+        start + CHARTS_PER_PAGE;
+
     const visibleCharts =
-        filteredImages.slice(
-            0,
-            visibleCount
-        );
+        filteredImages.slice(start, end);
 
     if (!visibleCharts.length) {
 
         chartGrid.innerHTML =
             '<p class="no-charts">No charts found.</p>';
-
-        loadMoreBtn.classList.add("hidden");
 
         return;
     }
@@ -313,7 +326,7 @@ function renderCharts() {
                     return;
                 }
 
-                openModal(index);
+                openModal(start + index);
             }
         );
 
@@ -322,36 +335,68 @@ function renderCharts() {
 
     updateFooter();
 
-    if (
-        visibleCount <
-        filteredImages.length
-    ) {
-
-        loadMoreBtn.classList.remove(
-            "hidden"
-        );
-    }
-    else {
-
-        loadMoreBtn.classList.add(
-            "hidden"
-        );
-    }
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 /* =========================================
-   LOAD MORE
+   PAGINATION
 ========================================= */
 
-loadMoreBtn.addEventListener(
-    "click",
-    function() {
+function renderPagination() {
 
-        visibleCount += LOAD_STEP;
+    paginationWrapper.innerHTML = "";
 
-        renderCharts();
+    const totalPages =
+        Math.ceil(
+            filteredImages.length /
+            CHARTS_PER_PAGE
+        );
+
+    if (totalPages <= 1) {
+        return;
     }
-);
+
+    for (
+        let i = 1;
+        i <= totalPages;
+        i++
+    ) {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "page-btn";
+
+        if (i === currentPage) {
+
+            button.classList.add(
+                "active"
+            );
+        }
+
+        button.innerHTML = i;
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                currentPage = i;
+
+                renderCharts();
+
+                renderPagination();
+            }
+        );
+
+        paginationWrapper.appendChild(
+            button
+        );
+    }
+}
 
 /* =========================================
    SEARCH
@@ -374,9 +419,11 @@ searchInput.addEventListener(
                     .includes(query);
             });
 
-        visibleCount = LOAD_STEP;
+        currentPage = 1;
 
         renderCharts();
+
+        renderPagination();
     }
 );
 
@@ -386,14 +433,26 @@ searchInput.addEventListener(
 
 function updateFooter() {
 
+    const start =
+        (currentPage - 1) *
+        CHARTS_PER_PAGE + 1;
+
+    const end =
+        Math.min(
+            currentPage *
+            CHARTS_PER_PAGE,
+            filteredImages.length
+        );
+
     footerCount.innerHTML =
 
         "Showing " +
 
-        Math.min(
-            visibleCount,
-            filteredImages.length
-        ) +
+        start +
+
+        " - " +
+
+        end +
 
         " of " +
 
@@ -507,97 +566,6 @@ modal.addEventListener(
         if (e.target === modal) {
 
             modal.classList.add("hidden");
-        }
-    }
-);
-
-/* =========================================
-   KEYBOARD
-========================================= */
-
-window.addEventListener(
-    "keydown",
-    function(e) {
-
-        if (
-            modal.classList.contains("hidden")
-        ) {
-            return;
-        }
-
-        if (
-            e.key === "ArrowRight" &&
-            currentImageIndex <
-            filteredImages.length - 1
-        ) {
-
-            currentImageIndex++;
-
-            updateModalImage();
-        }
-
-        if (
-            e.key === "ArrowLeft" &&
-            currentImageIndex > 0
-        ) {
-
-            currentImageIndex--;
-
-            updateModalImage();
-        }
-
-        if (e.key === "Escape") {
-
-            modal.classList.add("hidden");
-        }
-    }
-);
-
-/* =========================================
-   TOUCH
-========================================= */
-
-let touchStartX = 0;
-
-let touchEndX = 0;
-
-modal.addEventListener(
-    "touchstart",
-    function(e) {
-
-        touchStartX =
-            e.changedTouches[0].screenX;
-    }
-);
-
-modal.addEventListener(
-    "touchend",
-    function(e) {
-
-        touchEndX =
-            e.changedTouches[0].screenX;
-
-        if (
-            touchEndX <
-            touchStartX - 50 &&
-            currentImageIndex <
-            filteredImages.length - 1
-        ) {
-
-            currentImageIndex++;
-
-            updateModalImage();
-        }
-
-        if (
-            touchEndX >
-            touchStartX + 50 &&
-            currentImageIndex > 0
-        ) {
-
-            currentImageIndex--;
-
-            updateModalImage();
         }
     }
 );
