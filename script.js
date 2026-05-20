@@ -322,10 +322,6 @@ function renderCharts() {
             symbol +
             '</h3>' +
 
-            '<p>' +
-            currentScanner.name +
-            '</p>' +
-
             '</div>';
 
         card.addEventListener(
