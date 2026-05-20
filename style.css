@@ -279,6 +279,22 @@ body {
 }
 
 /* =========================================
+   DESKTOP CENTERED SCANNER PILLS
+========================================= */
+
+@media (min-width: 769px) {
+
+    .sub-categories {
+
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+        overflow-x: visible;
+    }
+}
+
+/* =========================================
    TOOLBAR
 ========================================= */
 
@@ -760,8 +776,6 @@ body {
             );
     }
 
-    /* HEADER */
-
     .top-header {
 
         padding:
@@ -788,8 +802,6 @@ body {
         opacity: 0.72;
     }
 
-    /* STICKY */
-
     #stickyNav {
 
         top: 0;
@@ -806,8 +818,6 @@ body {
 
         backdrop-filter: blur(16px);
     }
-
-    /* MAIN TABS */
 
     .main-categories {
 
@@ -850,8 +860,6 @@ body {
         margin-top: 3px;
     }
 
-    /* SUB TABS */
-
     .sub-categories {
 
         gap: 10px;
@@ -864,6 +872,10 @@ body {
         overflow-x: auto;
 
         scroll-behavior: smooth;
+
+        justify-content: flex-start;
+
+        flex-wrap: nowrap;
     }
 
     .sub-tile {
@@ -883,8 +895,6 @@ body {
         white-space: nowrap;
     }
 
-    /* TOOLBAR */
-
     .toolbar {
 
         padding:
@@ -892,6 +902,10 @@ body {
             12px;
 
         gap: 10px;
+
+        flex-direction: column;
+
+        align-items: stretch;
     }
 
     .last-updated-box {
@@ -901,6 +915,8 @@ body {
         padding:
             10px
             14px;
+
+        min-width: auto;
     }
 
     .update-label {
@@ -913,8 +929,6 @@ body {
         font-size: 0.82rem;
     }
 
-    /* SEARCH */
-
     .search-box input {
 
         border-radius: 16px;
@@ -925,8 +939,6 @@ body {
 
         font-size: 0.92rem;
     }
-
-    /* GRID */
 
     .chart-grid {
 
@@ -941,8 +953,6 @@ body {
             24px;
     }
 
-    /* CARD */
-
     .chart-card {
 
         border-radius: 18px;
@@ -952,8 +962,6 @@ body {
 
         aspect-ratio: 1.25;
     }
-
-    /* TV BUTTON */
 
     .tv-link {
 
@@ -971,8 +979,6 @@ body {
         width: 18px;
         height: 18px;
     }
-
-    /* INFO */
 
     .chart-info {
 
@@ -998,8 +1004,6 @@ body {
         opacity: 0.72;
     }
 
-    /* LOAD MORE */
-
     .load-more-wrapper {
 
         padding-bottom: 24px;
@@ -1017,8 +1021,6 @@ body {
 
         font-size: 0.95rem;
     }
-
-    /* MODAL */
 
     .modal img {
 
@@ -1052,16 +1054,12 @@ body {
         right: 10px;
     }
 
-    /* FOOTER */
-
     .footer {
 
         padding-bottom: 22px;
 
         font-size: 0.82rem;
     }
-
-    /* LEARNERS */
 
     .learners-section {
 
