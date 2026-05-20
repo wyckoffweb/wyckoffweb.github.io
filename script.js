@@ -52,17 +52,25 @@ const CHARTS_PER_PAGE = 20;
 
 async function loadScanners() {
 
-    const response =
-        await fetch("data/scanners.json");
+    try {
 
-    scannersData =
-        await response.json();
+        const response =
+            await fetch("data/scanners.json");
 
-    setupMainTabs();
+        scannersData =
+            await response.json();
 
-    showCategory("swing");
+        setupMainTabs();
 
-    loadLastUpdated();
+        showCategory("swing");
+
+        loadLastUpdated();
+    }
+
+    catch (error) {
+
+        console.error(error);
+    }
 }
 
 /* =========================================
@@ -113,7 +121,9 @@ function showCategory(category) {
 
     if (category === "learn") {
 
-        learnersSection.classList.add("visible");
+        learnersSection.classList.add(
+            "visible"
+        );
 
         chartGrid.classList.add("hidden");
 
@@ -124,7 +134,9 @@ function showCategory(category) {
         return;
     }
 
-    learnersSection.classList.remove("visible");
+    learnersSection.classList.remove(
+        "visible"
+    );
 
     chartGrid.classList.remove("hidden");
 
@@ -335,9 +347,9 @@ function renderCharts() {
 
     updateFooter();
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+    chartGrid.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
     });
 }
 
