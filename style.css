@@ -668,6 +668,103 @@ body {
 }
 
 /* =========================================
+   MODAL ARROWS
+========================================= */
+
+.modal-arrow {
+
+    position: fixed;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 58px;
+    height: 58px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.45
+        );
+
+    backdrop-filter: blur(10px);
+
+    color: white;
+
+    font-size: 2rem;
+
+    z-index: 10001;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.modal-arrow:hover {
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.72
+        );
+}
+
+.left-arrow {
+
+    left: 18px;
+}
+
+.right-arrow {
+
+    right: 18px;
+}
+
+@media (max-width: 768px) {
+
+    .modal-arrow {
+
+        width: 46px;
+        height: 46px;
+
+        font-size: 1.5rem;
+
+        background:
+            rgba(
+                0,
+                0,
+                0,
+                0.35
+            );
+    }
+
+    .left-arrow {
+
+        left: 8px;
+    }
+
+    .right-arrow {
+
+        right: 8px;
+    }
+}
+
+/* =========================================
    MOBILE
 ========================================= */
 

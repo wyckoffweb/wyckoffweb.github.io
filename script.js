@@ -473,6 +473,14 @@ function updateFooter() {
    MODAL
 ========================================= */
 
+let touchStartX = 0;
+
+let touchEndX = 0;
+
+/* =========================================
+   MODAL
+========================================= */
+
 function openModal(index) {
 
     currentImageIndex = index;
@@ -480,6 +488,15 @@ function openModal(index) {
     updateModalImage();
 
     modal.classList.remove("hidden");
+
+    document.body.style.overflow = "hidden";
+}
+
+function closeModalFunction() {
+
+    modal.classList.add("hidden");
+
+    document.body.style.overflow = "";
 }
 
 function updateModalImage() {
@@ -492,68 +509,247 @@ function updateModalImage() {
         "/" +
         image;
 
-    renderModalArrows();
+    preloadAdjacentImages();
+
+    updateArrowVisibility();
 }
 
-function renderModalArrows() {
+/* =========================================
+   PRELOAD
+========================================= */
 
-    document
-        .querySelectorAll(".modal-arrow")
-        .forEach(a => a.remove());
-
-    if (currentImageIndex > 0) {
-
-        const leftArrow =
-            document.createElement("button");
-
-        leftArrow.className =
-            "modal-arrow left-arrow";
-
-        leftArrow.innerHTML = "❮";
-
-        leftArrow.addEventListener(
-            "click",
-            function(e) {
-
-                e.stopPropagation();
-
-                currentImageIndex--;
-
-                updateModalImage();
-            }
-        );
-
-        modal.appendChild(leftArrow);
-    }
+function preloadAdjacentImages() {
 
     if (
         currentImageIndex <
         filteredImages.length - 1
     ) {
 
-        const rightArrow =
-            document.createElement("button");
+        const nextImage =
+            new Image();
 
-        rightArrow.className =
-            "modal-arrow right-arrow";
+        nextImage.src =
+            currentScanner.path +
+            "/" +
+            filteredImages[
+                currentImageIndex + 1
+            ];
+    }
 
-        rightArrow.innerHTML = "❯";
+    if (currentImageIndex > 0) {
 
-        rightArrow.addEventListener(
-            "click",
-            function(e) {
+        const prevImage =
+            new Image();
 
-                e.stopPropagation();
-
-                currentImageIndex++;
-
-                updateModalImage();
-            }
-        );
-
-        modal.appendChild(rightArrow);
+        prevImage.src =
+            currentScanner.path +
+            "/" +
+            filteredImages[
+                currentImageIndex - 1
+            ];
     }
 }
+
+/* =========================================
+   ARROWS
+========================================= */
+
+function updateArrowVisibility() {
+
+    const leftArrow =
+        document.querySelector(
+            ".left-arrow"
+        );
+
+    const rightArrow =
+        document.querySelector(
+            ".right-arrow"
+        );
+
+    if (leftArrow) {
+
+        leftArrow.style.display =
+            currentImageIndex > 0
+                ? "flex"
+                : "none";
+    }
+
+    if (rightArrow) {
+
+        rightArrow.style.display =
+
+            currentImageIndex <
+            filteredImages.length - 1
+
+                ? "flex"
+                : "none";
+    }
+}
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function showPreviousImage() {
+
+    if (currentImageIndex > 0) {
+
+        currentImageIndex--;
+
+        updateModalImage();
+    }
+}
+
+function showNextImage() {
+
+    if (
+        currentImageIndex <
+        filteredImages.length - 1
+    ) {
+
+        currentImageIndex++;
+
+        updateModalImage();
+    }
+}
+
+/* =========================================
+   KEYBOARD
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e) {
+
+        if (
+            modal.classList.contains("hidden")
+        ) {
+            return;
+        }
+
+        if (e.key === "ArrowLeft") {
+
+            showPreviousImage();
+        }
+
+        if (e.key === "ArrowRight") {
+
+            showNextImage();
+        }
+
+        if (e.key === "Escape") {
+
+            closeModalFunction();
+        }
+    }
+);
+
+/* =========================================
+   TOUCH SWIPE
+========================================= */
+
+modal.addEventListener(
+    "touchstart",
+    function(e) {
+
+        touchStartX =
+            e.changedTouches[0].screenX;
+    }
+);
+
+modal.addEventListener(
+    "touchend",
+    function(e) {
+
+        touchEndX =
+            e.changedTouches[0].screenX;
+
+        handleSwipeGesture();
+    }
+);
+
+function handleSwipeGesture() {
+
+    const swipeDistance =
+        touchEndX - touchStartX;
+
+    if (swipeDistance > 60) {
+
+        showPreviousImage();
+    }
+
+    if (swipeDistance < -60) {
+
+        showNextImage();
+    }
+}
+
+/* =========================================
+   CLOSE MODAL
+========================================= */
+
+closeModal.addEventListener(
+    "click",
+    function() {
+
+        closeModalFunction();
+    }
+);
+
+modal.addEventListener(
+    "click",
+    function(e) {
+
+        if (e.target === modal) {
+
+            closeModalFunction();
+        }
+    }
+);
+
+/* =========================================
+   CREATE STATIC ARROWS
+========================================= */
+
+const leftArrow =
+    document.createElement("button");
+
+leftArrow.className =
+    "modal-arrow left-arrow";
+
+leftArrow.innerHTML = "❮";
+
+leftArrow.addEventListener(
+    "click",
+    function(e) {
+
+        e.stopPropagation();
+
+        showPreviousImage();
+    }
+);
+
+modal.appendChild(leftArrow);
+
+const rightArrow =
+    document.createElement("button");
+
+rightArrow.className =
+    "modal-arrow right-arrow";
+
+rightArrow.innerHTML = "❯";
+
+rightArrow.addEventListener(
+    "click",
+    function(e) {
+
+        e.stopPropagation();
+
+        showNextImage();
+    }
+);
+
+modal.appendChild(rightArrow);
 
 /* =========================================
    CLOSE MODAL
