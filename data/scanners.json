@@ -1,60 +1,37 @@
 {
     "swing": [
         {
-            "id": "bollinger",
-            "name": "Bollinger",
-            "path": "data/swing/bollinger/charts",
+            "id": "minervini",
+            "name": "Minervini VCP",
+            "path": "data/swing/minervini/charts",
             "count": 0
         },
         {
-            "id": "breakout",
-            "name": "Breakout",
-            "path": "data/swing/breakout/charts",
+            "id": "oneil",
+            "name": "O'Neil CANSLIM",
+            "path": "data/swing/oneil/charts",
+            "count": 0
+        },
+        {
+            "id": "qullamaggie",
+            "name": "Qullamaggie EP",
+            "path": "data/swing/qullamaggie/charts",
+            "count": 0
+        },
+        {
+            "id": "weinstein",
+            "name": "Weinstein Stage 2",
+            "path": "data/swing/weinstein/charts",
             "count": 0
         },
         {
             "id": "confluence",
-            "name": "Confluence",
+            "name": "Multi-Legend Confluence",
             "path": "data/swing/confluence/charts",
-            "count": 0
-        },
-        {
-            "id": "ema20_trend",
-            "name": "Ema20 Trend",
-            "path": "data/swing/ema20_trend/charts",
-            "count": 0
-        },
-        {
-            "id": "ema50_pullback",
-            "name": "Ema50 Pullback",
-            "path": "data/swing/ema50_pullback/charts",
-            "count": 0
-        },
-        {
-            "id": "new_ipos",
-            "name": "New Ipos",
-            "path": "data/swing/new_ipos/charts",
-            "count": 0
-        },
-        {
-            "id": "no_signal",
-            "name": "No Signal",
-            "path": "data/swing/no_signal/charts",
-            "count": 0
-        },
-        {
-            "id": "rsi",
-            "name": "Rsi",
-            "path": "data/swing/rsi/charts",
-            "count": 0
-        },
-        {
-            "id": "standalone",
-            "name": "Standalone",
-            "path": "data/swing/standalone/charts",
             "count": 0
         }
     ],
+
     "wyckoff": [
         {
             "id": "confluence",
@@ -82,13 +59,13 @@
         },
         {
             "id": "phasec",
-            "name": "Phasec",
+            "name": "Phase C",
             "path": "data/wyckoff/phasec/charts",
             "count": 50
         },
         {
             "id": "phasec_hl",
-            "name": "Phasec Hl",
+            "name": "Phase C HL",
             "path": "data/wyckoff/phasec_hl/charts",
             "count": 50
         },
