@@ -1,41 +1,94 @@
 {
     "swing": [
         {
-            "id": "minervini",
-            "name": "Minervini VCP",
-            "path": "data/swing/minervini/charts",
-            "count": 0
+            "id": "bollinger",
+            "name": "Bollinger",
+            "path": "data/swing/bollinger/charts",
+            "count": 756
         },
         {
-            "id": "oneil",
-            "name": "O'Neil CANSLIM",
-            "path": "data/swing/oneil/charts",
-            "count": 0
-        },
-        {
-            "id": "qullamaggie",
-            "name": "Qullamaggie EP",
-            "path": "data/swing/qullamaggie/charts",
-            "count": 0
-        },
-        {
-            "id": "weinstein",
-            "name": "Weinstein Stage 2",
-            "path": "data/swing/weinstein/charts",
-            "count": 0
+            "id": "breakout",
+            "name": "Breakout",
+            "path": "data/swing/breakout/charts",
+            "count": 46
         },
         {
             "id": "confluence",
             "name": "Multi-Legend Confluence",
             "path": "data/swing/confluence/charts",
+            "count": 487
+        },
+        {
+            "id": "data",
+            "name": "Data",
+            "path": "data/swing/data/charts",
             "count": 0
+        },
+        {
+            "id": "ema20_trend",
+            "name": "Ema20 Trend",
+            "path": "data/swing/ema20_trend/charts",
+            "count": 654
+        },
+        {
+            "id": "ema50_pullback",
+            "name": "Ema50 Pullback",
+            "path": "data/swing/ema50_pullback/charts",
+            "count": 871
+        },
+        {
+            "id": "minervini",
+            "name": "Minervini",
+            "path": "data/swing/minervini/charts",
+            "count": 43
+        },
+        {
+            "id": "new_ipos",
+            "name": "New Ipos",
+            "path": "data/swing/new_ipos/charts",
+            "count": 276
+        },
+        {
+            "id": "no_signal",
+            "name": "No Signal",
+            "path": "data/swing/no_signal/charts",
+            "count": 0
+        },
+        {
+            "id": "oneil",
+            "name": "Oneil",
+            "path": "data/swing/oneil/charts",
+            "count": 17
+        },
+        {
+            "id": "qullamaggie",
+            "name": "Qullamaggie",
+            "path": "data/swing/qullamaggie/charts",
+            "count": 13
+        },
+        {
+            "id": "rsi",
+            "name": "Rsi",
+            "path": "data/swing/rsi/charts",
+            "count": 88
+        },
+        {
+            "id": "standalone",
+            "name": "Standalone",
+            "path": "data/swing/standalone/charts",
+            "count": 555
+        },
+        {
+            "id": "weinstein",
+            "name": "Weinstein",
+            "path": "data/swing/weinstein/charts",
+            "count": 18
         }
     ],
-
     "wyckoff": [
         {
             "id": "confluence",
-            "name": "Confluence",
+            "name": "Multi-Legend Confluence",
             "path": "data/wyckoff/confluence/charts",
             "count": 0
         },
@@ -46,8 +99,20 @@
             "count": 0
         },
         {
+            "id": "downtrend_absorption",
+            "name": "Downtrend Absorption",
+            "path": "data/wyckoff/downtrend_absorption/charts",
+            "count": 0
+        },
+        {
+            "id": "flat_accumulation",
+            "name": "Flat Accumulation",
+            "path": "data/wyckoff/flat_accumulation/charts",
+            "count": 0
+        },
+        {
             "id": "merged_confluence",
-            "name": "Merged Confluence",
+            "name": "Multi-Legend Confluence",
             "path": "data/wyckoff/merged_confluence/charts",
             "count": 0
         },
@@ -58,14 +123,26 @@
             "count": 0
         },
         {
+            "id": "opportunity",
+            "name": "Opportunity",
+            "path": "data/wyckoff/opportunity/charts",
+            "count": 0
+        },
+        {
+            "id": "opportunity_charts",
+            "name": "Opportunity Charts",
+            "path": "data/wyckoff/opportunity_charts/charts",
+            "count": 0
+        },
+        {
             "id": "phasec",
-            "name": "Phase C",
+            "name": "Phasec",
             "path": "data/wyckoff/phasec/charts",
             "count": 50
         },
         {
             "id": "phasec_hl",
-            "name": "Phase C HL",
+            "name": "Phasec Hl",
             "path": "data/wyckoff/phasec_hl/charts",
             "count": 50
         },
@@ -73,7 +150,19 @@
             "id": "ranking",
             "name": "Ranking",
             "path": "data/wyckoff/ranking/charts",
-            "count": 59
+            "count": 106
+        },
+        {
+            "id": "regression_absorption",
+            "name": "Regression Absorption",
+            "path": "data/wyckoff/regression_absorption/charts",
+            "count": 0
+        },
+        {
+            "id": "regression_absorption_charts",
+            "name": "Regression Absorption Charts",
+            "path": "data/wyckoff/regression_absorption_charts/charts",
+            "count": 0
         },
         {
             "id": "standalone",
@@ -82,9 +171,39 @@
             "count": 0
         },
         {
+            "id": "trigger_v1",
+            "name": "Trigger V1",
+            "path": "data/wyckoff/trigger_v1/charts",
+            "count": 455
+        },
+        {
+            "id": "uptrend_absorption",
+            "name": "Uptrend Absorption",
+            "path": "data/wyckoff/uptrend_absorption/charts",
+            "count": 0
+        },
+        {
+            "id": "uptrend_absorption_charts",
+            "name": "Uptrend Absorption Charts",
+            "path": "data/wyckoff/uptrend_absorption_charts/charts",
+            "count": 0
+        },
+        {
             "id": "weekly",
             "name": "Weekly",
             "path": "data/wyckoff/weekly/charts",
+            "count": 0
+        },
+        {
+            "id": "weekly_opportunity",
+            "name": "Weekly Opportunity",
+            "path": "data/wyckoff/weekly_opportunity/charts",
+            "count": 0
+        },
+        {
+            "id": "weekly_opportunity_charts",
+            "name": "Weekly Opportunity Charts",
+            "path": "data/wyckoff/weekly_opportunity_charts/charts",
             "count": 0
         }
     ]
