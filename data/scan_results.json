@@ -1,0 +1,443 @@
+{
+  "confluence": [
+    {
+      "ticker": "INFY",
+      "chart": "charts/wyckoff/INFY.webp",
+      "score": 70,
+      "setup": "higher_lows"
+    },
+    {
+      "ticker": "INFY",
+      "chart": "charts/wyckoff/INFY.webp",
+      "score": 70,
+      "setup": "lps"
+    },
+    {
+      "ticker": "AXISBANK",
+      "chart": "charts/weekly/AXISBANK.webp",
+      "score": 70,
+      "setup": "weekly_macro_channel"
+    },
+    {
+      "ticker": "LT",
+      "chart": "charts/weekly/LT.webp",
+      "score": 70,
+      "setup": "weekly_macro_channel"
+    },
+    {
+      "ticker": "LT",
+      "chart": "charts/wyckoff/LT.webp",
+      "score": 70,
+      "setup": "lps"
+    },
+    {
+      "ticker": "LT",
+      "chart": "charts/elite/LT_vcp.webp",
+      "score": 70,
+      "setup": "minervini_vcp"
+    },
+    {
+      "ticker": "LT",
+      "chart": "charts/retail/LT.webp",
+      "score": 70,
+      "setup": "golden_cross"
+    },
+    {
+      "ticker": "WIPRO",
+      "chart": "charts/patterns/WIPRO.webp",
+      "score": 70,
+      "setup": "ascending_triangle"
+    },
+    {
+      "ticker": "BHARTIARTL",
+      "chart": "charts/wyckoff/BHARTIARTL.webp",
+      "score": 70,
+      "setup": "lps"
+    },
+    {
+      "ticker": "BHARTIARTL",
+      "chart": "charts/retail/BHARTIARTL.webp",
+      "score": 70,
+      "setup": "ema_dry_pullback"
+    },
+    {
+      "ticker": "BHARTIARTL",
+      "chart": "charts/patterns/BHARTIARTL.webp",
+      "score": 70,
+      "setup": "ascending_triangle"
+    },
+    {
+      "ticker": "SUNPHARMA",
+      "chart": "charts/weekly/SUNPHARMA.webp",
+      "score": 70,
+      "setup": "weekly_macro_channel"
+    },
+    {
+      "ticker": "SUNPHARMA",
+      "chart": "charts/wyckoff/SUNPHARMA.webp",
+      "score": 70,
+      "setup": "lps"
+    },
+    {
+      "ticker": "SUNPHARMA",
+      "chart": "charts/patterns/SUNPHARMA.webp",
+      "score": 70,
+      "setup": "ascending_triangle"
+    },
+    {
+      "ticker": "KOTAKBANK",
+      "chart": "charts/weekly/KOTAKBANK.webp",
+      "score": 70,
+      "setup": "weekly_macro_channel"
+    },
+    {
+      "ticker": "KOTAKBANK",
+      "chart": "charts/wyckoff/KOTAKBANK.webp",
+      "score": 70,
+      "setup": "higher_lows"
+    },
+    {
+      "ticker": "KOTAKBANK",
+      "chart": "charts/wyckoff/KOTAKBANK.webp",
+      "score": 70,
+      "setup": "lps"
+    },
+    {
+      "ticker": "KOTAKBANK",
+      "chart": "charts/retail/KOTAKBANK.webp",
+      "score": 70,
+      "setup": "ema_dry_pullback"
+    },
+    {
+      "ticker": "RELIANCE",
+      "chart": "charts/wyckoff/RELIANCE.webp",
+      "score": 55,
+      "setup": "higher_lows"
+    },
+    {
+      "ticker": "RELIANCE",
+      "chart": "charts/wyckoff/RELIANCE.webp",
+      "score": 55,
+      "setup": "lps"
+    },
+    {
+      "ticker": "TCS",
+      "chart": "charts/wyckoff/TCS.webp",
+      "score": 55,
+      "setup": "lps"
+    },
+    {
+      "ticker": "TCS",
+      "chart": "charts/patterns/TCS.webp",
+      "score": 55,
+      "setup": "cup_and_handle"
+    },
+    {
+      "ticker": "TCS",
+      "chart": "charts/patterns/TCS.webp",
+      "score": 55,
+      "setup": "ascending_triangle"
+    },
+    {
+      "ticker": "MARUTI",
+      "chart": "charts/weekly/MARUTI.webp",
+      "score": 55,
+      "setup": "weekly_macro_channel"
+    },
+    {
+      "ticker": "MARUTI",
+      "chart": "charts/wyckoff/MARUTI.webp",
+      "score": 55,
+      "setup": "lps"
+    },
+    {
+      "ticker": "TITAN",
+      "chart": "charts/weekly/TITAN.webp",
+      "score": 55,
+      "setup": "weekly_macro_channel"
+    },
+    {
+      "ticker": "TITAN",
+      "chart": "charts/wyckoff/TITAN.webp",
+      "score": 55,
+      "setup": "sos"
+    },
+    {
+      "ticker": "TITAN",
+      "chart": "charts/patterns/TITAN.webp",
+      "score": 55,
+      "setup": "ascending_triangle"
+    },
+    {
+      "ticker": "BAJFINANCE",
+      "chart": "charts/weekly/BAJFINANCE.webp",
+      "score": 55,
+      "setup": "weekly_macro_channel"
+    },
+    {
+      "ticker": "BAJFINANCE",
+      "chart": "charts/patterns/BAJFINANCE.webp",
+      "score": 55,
+      "setup": "ascending_triangle"
+    },
+    {
+      "ticker": "ICICIBANK",
+      "chart": "charts/weekly/ICICIBANK.webp",
+      "score": 55,
+      "setup": "weekly_macro_channel"
+    },
+    {
+      "ticker": "ICICIBANK",
+      "chart": "charts/wyckoff/ICICIBANK.webp",
+      "score": 55,
+      "setup": "lps"
+    },
+    {
+      "ticker": "ICICIBANK",
+      "chart": "charts/elite/ICICIBANK_vcp.webp",
+      "score": 55,
+      "setup": "minervini_vcp"
+    },
+    {
+      "ticker": "ICICIBANK",
+      "chart": "charts/patterns/ICICIBANK.webp",
+      "score": 55,
+      "setup": "ascending_triangle"
+    }
+  ],
+  "weekly": {
+    "weekly_macro_channel": [
+      {
+        "ticker": "AXISBANK",
+        "chart": "charts/weekly/AXISBANK.webp",
+        "score": 70,
+        "setup": "weekly_macro_channel"
+      },
+      {
+        "ticker": "MARUTI",
+        "chart": "charts/weekly/MARUTI.webp",
+        "score": 55,
+        "setup": "weekly_macro_channel"
+      },
+      {
+        "ticker": "LT",
+        "chart": "charts/weekly/LT.webp",
+        "score": 70,
+        "setup": "weekly_macro_channel"
+      },
+      {
+        "ticker": "TITAN",
+        "chart": "charts/weekly/TITAN.webp",
+        "score": 55,
+        "setup": "weekly_macro_channel"
+      },
+      {
+        "ticker": "BAJFINANCE",
+        "chart": "charts/weekly/BAJFINANCE.webp",
+        "score": 55,
+        "setup": "weekly_macro_channel"
+      },
+      {
+        "ticker": "ICICIBANK",
+        "chart": "charts/weekly/ICICIBANK.webp",
+        "score": 55,
+        "setup": "weekly_macro_channel"
+      },
+      {
+        "ticker": "SUNPHARMA",
+        "chart": "charts/weekly/SUNPHARMA.webp",
+        "score": 70,
+        "setup": "weekly_macro_channel"
+      },
+      {
+        "ticker": "KOTAKBANK",
+        "chart": "charts/weekly/KOTAKBANK.webp",
+        "score": 70,
+        "setup": "weekly_macro_channel"
+      }
+    ]
+  },
+  "wyckoff": {
+    "springs": [],
+    "higher_lows": [
+      {
+        "ticker": "INFY",
+        "chart": "charts/wyckoff/INFY.webp",
+        "score": 70,
+        "setup": "higher_lows"
+      },
+      {
+        "ticker": "RELIANCE",
+        "chart": "charts/wyckoff/RELIANCE.webp",
+        "score": 55,
+        "setup": "higher_lows"
+      },
+      {
+        "ticker": "KOTAKBANK",
+        "chart": "charts/wyckoff/KOTAKBANK.webp",
+        "score": 70,
+        "setup": "higher_lows"
+      }
+    ],
+    "sos": [
+      {
+        "ticker": "TITAN",
+        "chart": "charts/wyckoff/TITAN.webp",
+        "score": 55,
+        "setup": "sos"
+      }
+    ],
+    "lps": [
+      {
+        "ticker": "INFY",
+        "chart": "charts/wyckoff/INFY.webp",
+        "score": 70,
+        "setup": "lps"
+      },
+      {
+        "ticker": "RELIANCE",
+        "chart": "charts/wyckoff/RELIANCE.webp",
+        "score": 55,
+        "setup": "lps"
+      },
+      {
+        "ticker": "TCS",
+        "chart": "charts/wyckoff/TCS.webp",
+        "score": 55,
+        "setup": "lps"
+      },
+      {
+        "ticker": "MARUTI",
+        "chart": "charts/wyckoff/MARUTI.webp",
+        "score": 55,
+        "setup": "lps"
+      },
+      {
+        "ticker": "LT",
+        "chart": "charts/wyckoff/LT.webp",
+        "score": 70,
+        "setup": "lps"
+      },
+      {
+        "ticker": "BHARTIARTL",
+        "chart": "charts/wyckoff/BHARTIARTL.webp",
+        "score": 70,
+        "setup": "lps"
+      },
+      {
+        "ticker": "ICICIBANK",
+        "chart": "charts/wyckoff/ICICIBANK.webp",
+        "score": 55,
+        "setup": "lps"
+      },
+      {
+        "ticker": "SUNPHARMA",
+        "chart": "charts/wyckoff/SUNPHARMA.webp",
+        "score": 70,
+        "setup": "lps"
+      },
+      {
+        "ticker": "KOTAKBANK",
+        "chart": "charts/wyckoff/KOTAKBANK.webp",
+        "score": 70,
+        "setup": "lps"
+      }
+    ]
+  },
+  "elite": {
+    "minervini_vcp": [
+      {
+        "ticker": "LT",
+        "chart": "charts/elite/LT_vcp.webp",
+        "score": 70,
+        "setup": "minervini_vcp"
+      },
+      {
+        "ticker": "ICICIBANK",
+        "chart": "charts/elite/ICICIBANK_vcp.webp",
+        "score": 55,
+        "setup": "minervini_vcp"
+      }
+    ]
+  },
+  "retail": {
+    "golden_cross": [
+      {
+        "ticker": "LT",
+        "chart": "charts/retail/LT.webp",
+        "score": 70,
+        "setup": "golden_cross"
+      }
+    ],
+    "ema_dry_pullback": [
+      {
+        "ticker": "BHARTIARTL",
+        "chart": "charts/retail/BHARTIARTL.webp",
+        "score": 70,
+        "setup": "ema_dry_pullback"
+      },
+      {
+        "ticker": "KOTAKBANK",
+        "chart": "charts/retail/KOTAKBANK.webp",
+        "score": 70,
+        "setup": "ema_dry_pullback"
+      }
+    ],
+    "rsi_40_bounce": [],
+    "nr7": []
+  },
+  "patterns": {
+    "cup_and_handle": [
+      {
+        "ticker": "TCS",
+        "chart": "charts/patterns/TCS.webp",
+        "score": 55,
+        "setup": "cup_and_handle"
+      }
+    ],
+    "ascending_triangle": [
+      {
+        "ticker": "TCS",
+        "chart": "charts/patterns/TCS.webp",
+        "score": 55,
+        "setup": "ascending_triangle"
+      },
+      {
+        "ticker": "WIPRO",
+        "chart": "charts/patterns/WIPRO.webp",
+        "score": 70,
+        "setup": "ascending_triangle"
+      },
+      {
+        "ticker": "BHARTIARTL",
+        "chart": "charts/patterns/BHARTIARTL.webp",
+        "score": 70,
+        "setup": "ascending_triangle"
+      },
+      {
+        "ticker": "TITAN",
+        "chart": "charts/patterns/TITAN.webp",
+        "score": 55,
+        "setup": "ascending_triangle"
+      },
+      {
+        "ticker": "BAJFINANCE",
+        "chart": "charts/patterns/BAJFINANCE.webp",
+        "score": 55,
+        "setup": "ascending_triangle"
+      },
+      {
+        "ticker": "ICICIBANK",
+        "chart": "charts/patterns/ICICIBANK.webp",
+        "score": 55,
+        "setup": "ascending_triangle"
+      },
+      {
+        "ticker": "SUNPHARMA",
+        "chart": "charts/patterns/SUNPHARMA.webp",
+        "score": 70,
+        "setup": "ascending_triangle"
+      }
+    ]
+  }
+}

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradingView Live Toggle Test</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Official TradingView Embed Script -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #070a0f;
+            --panel-bg: rgba(15, 23, 42, 0.95);
+            --panel-border: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --blue: #38bdf8;
+            --green: #10b981;
+            --tv-blue: #2563eb;
+        }
+
+        body {
+            margin: 0;
+            padding: 2rem 1rem;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-box {
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .header-box h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Demo Ticker Selector */
+        .test-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .ticker-btn {
+            background: #1e293b;
+            border: 1px solid var(--panel-border);
+            color: #cbd5e1;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .ticker-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* Open Modal Trigger Card */
+        .preview-card {
+            background: #0f172a;
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .open-modal-btn {
+            background: linear-gradient(135deg, #0284c7, #059669);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        .open-modal-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        /* Fullscreen Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.96);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content-wrap {
+            position: relative;
+            width: 95vw;
+            max-width: 1300px;
+            height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--panel-border);
+            object-fit: contain;
+        }
+
+        #tv-interactive-container {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--panel-border);
+            display: none;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-footer {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .action-btn {
+            background: #1e293b;
+            border: 1px solid var(--panel-border);
+            color: #cbd5e1;
+            border-radius: 6px;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mode-toggle-btn {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid var(--blue);
+            color: var(--blue);
+        }
+
+        .mode-toggle-btn:hover {
+            background: var(--blue);
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-box">
+        <h1>TradingView Live Toggle Testbench</h1>
+        <p>Test the responsive switch between the static WebP chart and the live interactive TradingView HTML5 canvas with mobile touch/pinch gestures.</p>
+    </div>
+
+    <!-- Ticker Selectors -->
+    <div class="test-controls">
+        <button class="ticker-btn active" onclick="selectTicker('TCS')">TCS</button>
+        <button class="ticker-btn" onclick="selectTicker('RELIANCE')">RELIANCE</button>
+        <button class="ticker-btn" onclick="selectTicker('INFY')">INFY</button>
+        <button class="ticker-btn" onclick="selectTicker('HDFCBANK')">HDFCBANK</button>
+    </div>
+
+    <div class="preview-card">
+        <h3 id="preview-title" style="margin-top:0;">TCS • Minervini VCP</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1.25rem;">Click below to launch the modal sandbox and test both static & live modes.</p>
+        <button class="open-modal-btn" onclick="openTestModal()">🔍 Launch Chart Modal</button>
+    </div>
+
+    <!-- The Fullscreen Modal -->
+    <div class="modal" id="test-modal">
+        <span class="modal-close" onclick="closeTestModal()">&times;</span>
+        
+        <div class="modal-content-wrap">
+            <!-- 1. Static Image View -->
+            <img src="charts/tcs_chart.webp" id="modal-img" class="modal-img" alt="Static Setup Chart" onerror="handleImgError(this)">
+            
+            <!-- 2. Interactive TradingView Container -->
+            <div id="tv-interactive-container"></div>
+        </div>
+
+        <div class="modal-footer">
+            <span id="modal-caption" style="font-weight:700; font-family:'JetBrains Mono', monospace;">TCS</span>
+            
+            <!-- Toggle Button -->
+            <button id="modal-mode-toggle" class="action-btn mode-toggle-btn" onclick="toggleMode()">⚡ Live Interactive</button>
+            <button class="action-btn" onclick="closeTestModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let currentTicker = 'TCS';
+        let isLiveInteractive = false;
+
+        function selectTicker(ticker) {
+            currentTicker = ticker;
+            document.querySelectorAll('.ticker-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText === ticker);
+            });
+            document.getElementById('preview-title').innerText = `${ticker} • Test Setup`;
+        }
+
+        function openTestModal() {
+            isLiveInteractive = false;
+            
+            const modalImg = document.getElementById('modal-img');
+            const tvContainer = document.getElementById('tv-interactive-container');
+            const toggleBtn = document.getElementById('modal-mode-toggle');
+
+            // Reset to static view
+            modalImg.style.display = 'block';
+            modalImg.src = `charts/${currentTicker.toLowerCase()}_chart.webp`;
+            tvContainer.style.display = 'none';
+            tvContainer.innerHTML = '';
+            
+            toggleBtn.innerText = '⚡ Live Interactive';
+            document.getElementById('modal-caption').innerText = `NSE:${currentTicker}`;
+            document.getElementById('test-modal').classList.add('active');
+        }
+
+        function closeTestModal() {
+            document.getElementById('test-modal').classList.remove('active');
+            document.getElementById('tv-interactive-container').innerHTML = '';
+        }
+
+        function toggleMode() {
+            const modalImg = document.getElementById('modal-img');
+            const tvContainer = document.getElementById('tv-interactive-container');
+            const toggleBtn = document.getElementById('modal-mode-toggle');
+
+            isLiveInteractive = !isLiveInteractive;
+
+            if (isLiveInteractive) {
+                // Switch to TradingView Interactive Live
+                modalImg.style.display = 'none';
+                tvContainer.style.display = 'block';
+                toggleBtn.innerText = '🖼️ Static Setup';
+
+                new TradingView.widget({
+                    "autosize": true,
+                    "symbol": `NSE:${currentTicker}`,
+                    "interval": "D",
+                    "timezone": "Asia/Kolkata",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "en",
+                    "toolbar_bg": "#0f172a",
+                    "enable_publishing": false,
+                    "hide_top_toolbar": false,
+                    "save_image": false,
+                    "container_id": "tv-interactive-container"
+                });
+            } else {
+                // Switch back to Static WebP
+                tvContainer.style.display = 'none';
+                tvContainer.innerHTML = '';
+                modalImg.style.display = 'block';
+                toggleBtn.innerText = '⚡ Live Interactive';
+            }
+        }
+
+        function handleImgError(img) {
+            // Fallback placeholder if the specific ticker chart has not been generated yet
+            img.src = 'https://dummyimage.com/1200x700/0f172a/38bdf8.png&text=Static+Chart+Image+Preview';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeTestModal();
+        });
+    </script>
+</body>
+</html>

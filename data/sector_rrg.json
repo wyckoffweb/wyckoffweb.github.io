@@ -1,0 +1,178 @@
+{
+  "timestamp": "21 Aug 2026 11:19",
+  "sectors": [
+    {
+      "sector": "NIFTY AUTO",
+      "symbol": "^CNXAUTO",
+      "jk_rs_ratio": 107.05,
+      "jk_rs_momentum": 107.16,
+      "quadrant": "LEADING",
+      "color": "#10b981",
+      "stocks": [
+        "TATAMOTORS",
+        "M&M",
+        "MARUTI",
+        "BAJAJ-AUTO",
+        "HEROMOTOCO",
+        "EICHERMOT",
+        "TVSMOTOR",
+        "BHARATFORG",
+        "ASHOKLEY",
+        "BALKRISIND"
+      ]
+    },
+    {
+      "sector": "NIFTY IT",
+      "symbol": "^CNXIT",
+      "jk_rs_ratio": 99.15,
+      "jk_rs_momentum": 98.81,
+      "quadrant": "LAGGING",
+      "color": "#ef4444",
+      "stocks": [
+        "TCS",
+        "INFY",
+        "HCLTECH",
+        "WIPRO",
+        "TECHM",
+        "LTIM",
+        "PERSISTENT",
+        "COFORGE",
+        "MPHASIS",
+        "KPITTECH"
+      ]
+    },
+    {
+      "sector": "NIFTY PHARMA",
+      "symbol": "^CNXPHARMA",
+      "jk_rs_ratio": 99.57,
+      "jk_rs_momentum": 99.44,
+      "quadrant": "LAGGING",
+      "color": "#ef4444",
+      "stocks": [
+        "SUNPHARMA",
+        "CIPLA",
+        "DRREDDY",
+        "DIVISLAB",
+        "LUPIN",
+        "TORNTPHARM",
+        "AUROPHARMA",
+        "ZYDUSLIFE",
+        "MANKIND",
+        "GLENMARK"
+      ]
+    },
+    {
+      "sector": "NIFTY FMCG",
+      "symbol": "^CNXFMCG",
+      "jk_rs_ratio": 96.81,
+      "jk_rs_momentum": 98.6,
+      "quadrant": "LAGGING",
+      "color": "#ef4444",
+      "stocks": [
+        "ITC",
+        "HINDUNILVR",
+        "NESTLEIND",
+        "BRITANNIA",
+        "TATACONSUM",
+        "VBL",
+        "DABUR",
+        "GODREJCP",
+        "MARICO",
+        "COLPAL"
+      ]
+    },
+    {
+      "sector": "NIFTY METAL",
+      "symbol": "^CNXMETAL",
+      "jk_rs_ratio": 103.83,
+      "jk_rs_momentum": 103.78,
+      "quadrant": "LEADING",
+      "color": "#10b981",
+      "stocks": [
+        "TATASTEEL",
+        "JSWSTEEL",
+        "HINDALCO",
+        "JINDALSTEL",
+        "VEDL",
+        "NMDC",
+        "SAIL",
+        "NATIONALUM",
+        "APLAPOLLO"
+      ]
+    },
+    {
+      "sector": "NIFTY REALTY",
+      "symbol": "^CNXREALTY",
+      "jk_rs_ratio": 99.57,
+      "jk_rs_momentum": 94.93,
+      "quadrant": "LAGGING",
+      "color": "#ef4444",
+      "stocks": [
+        "DLF",
+        "GODREJPROP",
+        "LODHA",
+        "PRESTIGE",
+        "OBEROIRLTY",
+        "PHOENIXLTD",
+        "BRIGADE",
+        "SOBHA"
+      ]
+    },
+    {
+      "sector": "NIFTY ENERGY",
+      "symbol": "^CNXENERGY",
+      "jk_rs_ratio": 97.8,
+      "jk_rs_momentum": 98.31,
+      "quadrant": "LAGGING",
+      "color": "#ef4444",
+      "stocks": [
+        "RELIANCE",
+        "NTPC",
+        "POWERGRID",
+        "ONGC",
+        "COALINDIA",
+        "BPCL",
+        "IOC",
+        "ADANIGREEN",
+        "TATAPOWER"
+      ]
+    },
+    {
+      "sector": "NIFTY INFRA",
+      "symbol": "^CNXINFRA",
+      "jk_rs_ratio": 99.52,
+      "jk_rs_momentum": 100.14,
+      "quadrant": "IMPROVING",
+      "color": "#38bdf8",
+      "stocks": [
+        "LT",
+        "ULTRACEMCO",
+        "GRASIM",
+        "ADANIPORTS",
+        "BHARTIARTL",
+        "BHEL",
+        "SIEMENS",
+        "ABB"
+      ]
+    },
+    {
+      "sector": "NIFTY BANK",
+      "symbol": "^NSEBANK",
+      "jk_rs_ratio": 100.58,
+      "jk_rs_momentum": 100.35,
+      "quadrant": "LEADING",
+      "color": "#10b981",
+      "stocks": [
+        "HDFCBANK",
+        "ICICIBANK",
+        "SBIN",
+        "AXISBANK",
+        "KOTAKBANK",
+        "INDUSINDBK",
+        "FEDERALBNK",
+        "AUBANK",
+        "BANDHANBNK"
+      ]
+    }
+  ]
+}
