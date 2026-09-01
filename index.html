@@ -611,6 +611,38 @@
             cursor: not-allowed;
         }
 
+        
+        /* MODAL NAVIGATION CONTROLS */
+        .modal-body {
+            position: relative;
+        }
+        .modal-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 1.5rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .modal-nav-btn:hover {
+            background: var(--blue);
+            color: #000;
+            border-color: var(--blue);
+        }
+        .modal-nav-prev { left: 1rem; }
+        .modal-nav-next { right: 1rem; }
+
         /* MODAL */
         .modal {
             position: fixed;
@@ -925,9 +957,11 @@
                 </div>
                 <button class="close-btn" onclick="closeModal()">✕</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modal-swipe-area">
+                <button class="modal-nav-btn modal-nav-prev" onclick="navigateModal(-1)" title="Previous (Left Arrow)">&#10094;</button>
                 <img id="modal-chart-img" class="modal-img" src="" alt="Setup Chart">
                 <div id="tv-interactive-container" class="modal-tv-box" style="display:none;"></div>
+                <button class="modal-nav-btn modal-nav-next" onclick="navigateModal(1)" title="Next (Right Arrow)">&#10095;</button>
             </div>
             <div class="card-actions" style="background:#0f172a;">
                 <button class="card-act-btn" id="modal-fav-toggle" onclick="toggleModalFav()">☆ Favorite</button>
@@ -1261,6 +1295,53 @@
         }
 
         /* MODAL HANDLERS */
+        
+        function navigateModal(direction) {
+            currentModalIndex += direction;
+            if (currentModalIndex < 0) currentModalIndex = filteredDataset.length - 1;
+            if (currentModalIndex >= filteredDataset.length) currentModalIndex = 0;
+            openModal(currentModalIndex);
+        }
+
+        // Keyboard navigation (Left/Right Arrows, Escape, F for Favorite)
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('chart-modal');
+            if (modal && modal.classList.contains('active')) {
+                if (e.key === 'ArrowLeft') navigateModal(-1);
+                if (e.key === 'ArrowRight') navigateModal(1);
+                if (e.key === 'f' || e.key === 'F') toggleModalFav();
+                if (e.key === 'Escape') closeModal();
+            }
+        });
+
+        // Mobile Touch Swipe Handling
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const swipeArea = document.getElementById('chart-modal');
+
+        if (swipeArea) {
+            swipeArea.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            swipeArea.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipeGesture();
+            }, { passive: true });
+        }
+
+        function handleSwipeGesture() {
+            const swipeDistance = touchEndX - touchStartX;
+            const threshold = 45; // Minimum px distance for a valid swipe
+            if (Math.abs(swipeDistance) > threshold) {
+                if (swipeDistance < 0) {
+                    navigateModal(1);  // Swipe Left -> Next Chart
+                } else {
+                    navigateModal(-1); // Swipe Right -> Prev Chart
+                }
+            }
+        }
+
         function openModal(index) {
             currentModalIndex = index;
             const item = filteredDataset[index];
