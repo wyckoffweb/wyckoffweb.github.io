@@ -753,8 +753,17 @@
 
     <!-- 2. SUBMENUS -->
     <div class="submenu-container">
-        <div id="subnav-basic_swing" class="submenu-navbar">
-            <button class="sub-nav-btn active" onclick="filterGalleryByTag('Cup & Handle', this)">
+                <div id="subnav-basic_swing" class="submenu-navbar">
+            <button class="sub-nav-btn active" onclick="filterGalleryByTag('Golden Cross Retest', this)">
+                <span data-lang="en">Golden Cross Pullback</span><span data-lang="ml">ഗോൾഡൻ ക്രോസ് പുൾബാക്ക്</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('20 EMA Pullback', this)">
+                <span data-lang="en">20 EMA Pullback</span><span data-lang="ml">20 EMA പുൾബാക്ക്</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('RSI 40-50 Support', this)">
+                <span data-lang="en">RSI 40-50 Support</span><span data-lang="ml">RSI 40-50 സപ്പോർട്ട്</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('Cup & Handle', this)">
                 <span data-lang="en">Cup & Handle</span><span data-lang="ml">കപ്പ് & ഹാൻഡിൽ</span>
             </button>
             <button class="sub-nav-btn" onclick="filterGalleryByTag('Inverse H&S', this)">
@@ -976,7 +985,7 @@
             document.querySelectorAll('.submenu-navbar').forEach(sb => sb.classList.remove('active-bar'));
 
             const defaultTagMap = {
-                'basic_swing': 'Cup & Handle',
+                'basic_swing': 'Golden Cross Retest',
                 'elites_scan': 'Minervini VCP',
                 'wyckoff_scans': 'Phase C Spring',
                 'confluence': 'all',
