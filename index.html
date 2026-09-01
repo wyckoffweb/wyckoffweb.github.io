@@ -3,60 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WyckoffWeb | Institutional Flow Terminal</title>
-    
-    <!-- PWA Settings -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#070a0f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+    <title>WyckoffWeb | Visual Stock Screener</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Manjari:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- TradingView Embed Widget Library -->
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #070a0f;
-            --panel-bg: rgba(15, 23, 42, 0.9);
-            --panel-border: #1e293b;
+            --bg-dark: #090d16;
+            --bg-card: #111827;
+            --bg-card-hover: #1e293b;
+            --border-color: #1e293b;
+            --border-focus: #38bdf8;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --blue: #38bdf8;
             --green: #10b981;
-            --yellow: #f59e0b;
             --red: #ef4444;
-            --tv-blue: #2563eb;
+            --yellow: #f59e0b;
+            --gold: #fbbf24;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            margin: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
-            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        body.lang-ml {
-            font-family: 'Manjari', 'Inter', sans-serif;
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
-        /* 1. TOP NAVBAR */
-        .top-navbar {
-            background-color: var(--panel-bg);
-            backdrop-filter: blur(18px);
-            border-bottom: 1px solid var(--panel-border);
-            padding: 0 1.5rem;
-            height: 64px;
+        /* HEADER & NAVIGATION */
+        header {
+            background: #0f172a;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 200;
+            padding: 0.75rem 1.25rem;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .brand-logo-wrap {
@@ -64,302 +69,681 @@
             align-items: center;
             gap: 0.75rem;
             cursor: pointer;
-            text-decoration: none;
+            user-select: none;
         }
 
         .brand-logo-svg {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
+        }
+
+        .brand-info {
+            display: flex;
+            flex-direction: column;
         }
 
         .brand-name {
             font-size: 1.15rem;
             font-weight: 800;
             letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #fff;
+        }
+
+        .brand-tagline {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
         .main-menu-nav {
             display: flex;
             list-style: none;
-            margin: 0;
-            padding: 0;
-            gap: 0.5rem;
+            gap: 0.35rem;
             overflow-x: auto;
-            align-items: center;
+            scrollbar-width: none;
+            padding: 0.25rem 0;
         }
+        .main-menu-nav::-webkit-scrollbar { display: none; }
 
         .main-nav-btn {
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 0.88rem;
-            font-weight: 600;
-            padding: 0.45rem 0.9rem;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 0.5rem 0.85rem;
             border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.25s ease;
-            text-decoration: none;
-            display: inline-flex;
+            transition: all 0.2s ease;
+            display: flex;
             align-items: center;
-            color: #cbd5e1;
-            background: #0f172a;
+            gap: 0.4rem;
         }
 
         .main-nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            filter: brightness(1.15);
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        /* METALLIC THEMES */
-        .btn-rrg { background: linear-gradient(135deg, rgba(56, 189, 248, 0.18) 0%, rgba(16, 185, 129, 0.18) 100%); border-color: rgba(56, 189, 248, 0.4); color: #7dd3fc; }
-        .btn-rrg.active { background: linear-gradient(135deg, #0284c7 0%, #059669 100%) !important; color: #ffffff !important; border-color: #38bdf8 !important; font-weight: 700; box-shadow: 0 0 18px rgba(56, 189, 248, 0.45) !important; }
+        .main-nav-btn.active {
+            background: #1e293b;
+            color: var(--blue);
+            border-color: #334155;
+        }
 
-        .btn-alpha { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(249, 115, 22, 0.2) 100%); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; }
-        .btn-alpha.active { background: linear-gradient(135deg, #ef4444 0%, #f97316 100%) !important; color: #ffffff !important; border-color: #ef4444 !important; font-weight: 700; box-shadow: 0 0 18px rgba(239, 68, 68, 0.45) !important; }
+        .main-nav-btn.btn-alpha.active {
+            color: #fb923c;
+            border-color: rgba(251, 146, 60, 0.4);
+            background: rgba(251, 146, 60, 0.1);
+        }
 
-        .btn-copper { background: linear-gradient(135deg, rgba(217, 119, 6, 0.2) 0%, rgba(180, 83, 9, 0.2) 100%); border-color: rgba(217, 119, 6, 0.4); color: #fcd34d; }
-        .btn-copper.active { background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important; color: #ffffff !important; border-color: #f59e0b !important; font-weight: 700; box-shadow: 0 0 18px rgba(217, 119, 6, 0.45) !important; }
+        .lang-switch-box {
+            display: flex;
+            background: #1e293b;
+            padding: 2px;
+            border-radius: 6px;
+        }
 
-        .btn-silver { background: linear-gradient(135deg, rgba(148, 163, 184, 0.2) 0%, rgba(203, 213, 225, 0.15) 100%); border-color: rgba(148, 163, 184, 0.4); color: #e2e8f0; }
-        .btn-silver.active { background: linear-gradient(135deg, #475569 0%, #94a3b8 100%) !important; color: #ffffff !important; border-color: #f1f5f9 !important; font-weight: 700; box-shadow: 0 0 18px rgba(203, 213, 225, 0.45) !important; }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.3rem 0.55rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-        .btn-gold { background: linear-gradient(135deg, rgba(234, 179, 8, 0.22) 0%, rgba(202, 138, 4, 0.22) 100%); border-color: rgba(234, 179, 8, 0.45); color: #fef08a; }
-        .btn-gold.active { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%) !important; color: #000000 !important; border-color: #facc15 !important; font-weight: 800; box-shadow: 0 0 18px rgba(234, 179, 8, 0.5) !important; }
+        .lang-btn.active {
+            background: var(--blue);
+            color: #000;
+        }
 
-        .btn-watchlist { background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(251, 191, 36, 0.18) 100%); border-color: rgba(245, 158, 11, 0.4); color: #fde68a; }
-        .btn-watchlist.active { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; color: #ffffff !important; border-color: #fbbf24 !important; font-weight: 700; box-shadow: 0 0 18px rgba(245, 158, 11, 0.5) !important; }
+        /* SUBMENUS */
+        .submenu-container {
+            background: #0b1120;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-        .btn-academy { background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%); border-color: rgba(168, 85, 247, 0.4); color: #d8b4fe; }
-        .btn-academy:hover, .btn-academy.active { background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%) !important; color: #ffffff !important; border-color: #c084fc !important; font-weight: 700; box-shadow: 0 0 18px rgba(168, 85, 247, 0.5) !important; }
-
-        .nav-right-actions { display: flex; align-items: center; gap: 0.8rem; }
-        .lang-switch-box { display: flex; background: #090d16; border: 1px solid var(--panel-border); border-radius: 8px; padding: 2px; }
-        .lang-btn { background: transparent; border: none; color: var(--text-muted); font-size: 0.82rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-        .lang-btn.active { background: #2563eb; color: white; }
-
-        /* 2. SUBMENU (CENTER-ALIGNED) */
         .submenu-navbar {
-            background-color: #0b0f17;
-            border-bottom: 1px solid var(--panel-border);
-            padding: 0.55rem 1.5rem;
             display: none;
-            align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            padding: 0.5rem 1rem;
             overflow-x: auto;
-            white-space: nowrap;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .submenu-navbar.active-bar { display: flex; }
+        .submenu-navbar.active-bar {
+            display: flex;
+        }
 
         .sub-nav-btn {
             background: #111827;
-            border: 1px solid var(--panel-border);
+            border: 1px solid #1e293b;
             color: var(--text-muted);
-            font-size: 0.82rem;
-            font-weight: 600;
-            padding: 0.38rem 0.85rem;
+            padding: 0.4rem 0.75rem;
             border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            white-space: nowrap;
+            transition: all 0.2s ease;
         }
 
-        .sub-nav-btn:hover { border-color: var(--blue); color: var(--blue); }
-        .sub-nav-btn.active { background-color: #2563eb; border-color: #2563eb; color: white; }
-
-        /* 3. CONTROLS BAR (SEARCH & GRID/LIST TOGGLE) */
-        .controls-bar { 
-            background-color: var(--panel-bg); 
-            border-bottom: 1px solid var(--panel-border); 
-            padding: 0.65rem 1.5rem; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            flex-wrap: wrap; 
-            gap: 0.8rem; 
+        .sub-nav-btn.active {
+            background: var(--blue);
+            color: #0b0f19;
+            border-color: var(--blue);
         }
 
-        .controls-left { display: flex; align-items: center; gap: 1rem; }
-        .search-input { background-color: #070a0f; border: 1px solid var(--panel-border); border-radius: 8px; padding: 0.5rem 0.9rem; color: white; font-size: 0.88rem; min-width: 290px; outline: none; }
-        .search-input:focus { border-color: var(--blue); }
-        .view-mode-toggles { display: flex; background-color: #070a0f; border: 1px solid var(--panel-border); border-radius: 8px; padding: 2px; }
-        .view-toggle-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.35rem 0.8rem; font-size: 0.82rem; font-weight: 700; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-        .view-toggle-btn.active { background: #1e293b; color: var(--blue); }
-
-        /* 4. MARKET BREADTH BAR (PLACED BELOW CONTROLS) */
+        /* BREADTH BAR */
         .breadth-banner {
-            background-color: #080c13;
-            border-bottom: 1px solid var(--panel-border);
-            padding: 0.5rem 1.5rem;
+            background: #0d1527;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding: 0.45rem 1rem;
+            font-size: 0.78rem;
+        }
+
+        .breadth-item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            overflow-x: auto;
-            font-size: 0.82rem;
-            white-space: nowrap;
+            gap: 0.4rem;
+            color: var(--text-muted);
         }
 
-        .breadth-item { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-muted); font-weight: 500; }
-        .breadth-val { color: var(--text-main); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+        .breadth-val {
+            font-weight: 700;
+            color: var(--text-main);
+        }
 
-        .container { max-width: 1800px; margin: 0 auto; padding: 1.25rem 1.5rem; }
-        .section-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid var(--panel-border); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+        /* CONTROL TOOLBAR */
+        .controls-bar {
+            max-width: 1400px;
+            margin: 0.75rem auto 0;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
 
-        /* RRG QUADRANTS */
-        .view-section { display: none; }
-        .view-section.active-view { display: block; }
-        .rrg-4quadrant { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 14px; min-height: 380px; background-color: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 12px; padding: 14px; margin-bottom: 1.5rem; }
-        @media (max-width: 768px) { .rrg-4quadrant { grid-template-columns: 1fr; } }
-        .quadrant { border-radius: 8px; padding: 1.1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .quad-improving { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); }
-        .quad-leading   { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); }
-        .quad-lagging   { background: rgba(239, 68, 68, 0.06);  border: 1px solid rgba(239, 68, 68, 0.25); }
-        .quad-weakening { background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.25); }
-        .quad-header { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; }
-        .quad-row-label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0.35rem; margin-bottom: 0.2rem; }
-        .quad-indices-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.3rem; }
-        .quad-stocks-row { display: flex; flex-wrap: wrap; gap: 0.35rem; padding-top: 0.35rem; border-top: 1px dashed rgba(255, 255, 255, 0.08); }
-        .sec-pill { background-color: #111827; border: 1px solid var(--panel-border); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
-        .stock-pill { background-color: #0b0f17; border: 1px solid rgba(255, 255, 255, 0.12); color: #e2e8f0; padding: 0.22rem 0.55rem; border-radius: 4px; font-size: 0.78rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: all 0.2s; }
-        .stock-pill:hover { border-color: var(--blue); color: var(--blue); background-color: rgba(56, 189, 248, 0.12); transform: translateY(-1px); }
-        .outlook-desc-card { background-color: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 10px; padding: 1.25rem; line-height: 1.6; margin-bottom: 2rem; font-size: 0.92rem; }
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 320px;
+        }
 
-        /* GRID VIEW */
-        .scan-grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(1, 1fr); }
-        @media (min-width: 640px) { .scan-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .scan-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 1440px) { .scan-grid { grid-template-columns: repeat(4, 1fr); } }
-        @media (min-width: 1920px) { .scan-grid { grid-template-columns: repeat(5, 1fr); } }
+        .search-box input {
+            width: 100%;
+            background: #111827;
+            border: 1px solid #1e293b;
+            color: #fff;
+            padding: 0.5rem 0.75rem 0.5rem 2rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            outline: none;
+        }
 
-        .scan-card { background-color: #0f172a; border: 1px solid var(--panel-border); border-radius: 10px; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; display: flex; flex-direction: column; position: relative; }
-        .scan-card:hover { transform: translateY(-4px); border-color: rgba(56, 189, 248, 0.5); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); }
-        .scan-card.high-confluence { border-color: rgba(16, 185, 129, 0.45); }
-        .img-container { position: relative; cursor: pointer; background: #000; aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; }
-        .scan-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .fav-star-btn { position: absolute; top: 10px; right: 10px; background: rgba(7, 10, 15, 0.85); backdrop-filter: blur(8px); border: 1px solid var(--panel-border); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; color: var(--text-muted); transition: transform 0.2s, color 0.2s; z-index: 10; }
-        .fav-star-btn:hover { transform: scale(1.15); color: var(--yellow); }
-        .fav-star-btn.is-fav { color: var(--yellow); border-color: var(--yellow); background: rgba(245, 158, 11, 0.15); }
-        .scan-body { padding: 1rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
-        .ticker { font-size: 1.15rem; font-weight: 800; color: white; font-family: 'JetBrains Mono', monospace; }
-        .score-pill { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.35); padding: 0.2rem 0.55rem; border-radius: 6px; font-size: 0.8rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
-        .meta { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.45rem; }
-        .desc { font-size: 0.85rem; color: var(--text-main); line-height: 1.45; margin-bottom: 0.85rem; }
+        .search-box input:focus {
+            border-color: var(--blue);
+        }
 
-        .card-actions { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; padding-top: 0.65rem; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap; }
-        .action-btn-group { display: flex; gap: 0.4rem; }
-        .tv-btn { background-color: var(--tv-blue); color: white; border: none; border-radius: 6px; padding: 0.4rem 0.75rem; font-size: 0.78rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; cursor: pointer; transition: all 0.2s; }
-        .tv-btn:hover { filter: brightness(1.15); }
-        .action-text-btn { background: #1e293b; border: 1px solid var(--panel-border); color: #cbd5e1; border-radius: 6px; padding: 0.4rem 0.65rem; display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-decoration: none; }
-        .action-text-btn:hover { color: white; border-color: var(--blue); background: rgba(56, 189, 248, 0.12); }
+        .search-icon {
+            position: absolute;
+            left: 0.65rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
 
-        /* LIST / TABLE VIEW */
-        .table-wrap { display: none; overflow-x: auto; background-color: #0f172a; border: 1px solid var(--panel-border); border-radius: 10px; }
-        .fin-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        .fin-table th { background-color: #090d16; padding: 0.85rem 1rem; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--panel-border); white-space: nowrap; user-select: none; }
-        .fin-table th.sortable { cursor: pointer; transition: color 0.2s, background-color 0.2s; }
-        .fin-table th.sortable:hover { color: var(--blue); background-color: #1e293b; }
-        .fin-table th .sort-icon { margin-left: 6px; font-size: 0.75rem; color: var(--text-muted); }
-        .fin-table th.active-sort { color: var(--blue); }
-        .fin-table th.active-sort .sort-icon { color: var(--blue); }
-        .fin-table td { padding: 0.85rem 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); white-space: nowrap; }
-        .fin-table tr:hover { background-color: rgba(255, 255, 255, 0.03); }
+        .view-mode-toggles {
+            display: flex;
+            background: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 2px;
+        }
+
+        .view-toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.4rem 0.65rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .view-toggle-btn.active {
+            background: #1e293b;
+            color: var(--blue);
+        }
+
+        /* MAIN CONTAINER & SECTIONS */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active-view {
+            display: block;
+        }
+
+        .section-title-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* RRG ENHANCED VIEW */
+        .rrg-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .rrg-canvas-wrapper {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        #rrgCanvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            background: #090d16;
+        }
+
+        .rrg-quadrant-tabs {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+
+        .quad-tab-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 0.65rem 0.85rem;
+            border-radius: 8px;
+            background: #111827;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .quad-tab-btn.active {
+            background: #1e293b;
+            color: #fff;
+            border-color: var(--blue);
+        }
+
+        .rrg-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .sector-tile {
+            background: #111827;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }
+
+        .sector-tile:hover {
+            transform: translateY(-2px);
+            border-color: var(--blue);
+            background: var(--bg-card-hover);
+        }
+
+        .sector-tile-name {
+            font-weight: 700;
+            color: #fff;
+            font-size: 0.92rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .sector-tile-meta {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+        }
+
+        /* CARD GALLERY */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .stock-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-3px);
+            border-color: #334155;
+        }
+
+        .card-header {
+            padding: 0.85rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ticker-name {
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .score-pill {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--green);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .score-pill.fire {
+            background: rgba(251, 146, 60, 0.15);
+            color: #fb923c;
+            border-color: rgba(251, 146, 60, 0.35);
+        }
+
+        .card-img-wrap {
+            position: relative;
+            background: #000;
+            cursor: pointer;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+
+        .card-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .stock-card:hover .card-img-wrap img {
+            transform: scale(1.02);
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            padding: 0.75rem 1rem 0.4rem;
+        }
+
+        .tag-pill {
+            background: #1e293b;
+            color: var(--blue);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.45rem;
+            border-radius: 4px;
+        }
+
+        .card-meta-row {
+            padding: 0.4rem 1rem 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            border-top: 1px dashed rgba(255, 255, 255, 0.05);
+            margin-top: auto;
+        }
+
+        .card-actions {
+            display: flex;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .card-act-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.55rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .card-act-btn:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+        }
+
+        .card-act-btn + .card-act-btn {
+            border-left: 1px solid var(--border-color);
+        }
+
+        /* TABLE VIEW */
+        .table-wrap {
+            display: none;
+            overflow-x: auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+        }
+
+        .fin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            text-align: left;
+        }
+
+        .fin-table th {
+            background: #0f172a;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            user-select: none;
+        }
+
+        .fin-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: #e2e8f0;
+        }
+
+        .fin-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
 
         /* PAGINATION */
-        .pagination-container { display: flex; align-items: center; justify-content: center; gap: 0.35rem; margin-top: 2rem; margin-bottom: 2rem; flex-wrap: wrap; user-select: none; }
-        .page-btn { background-color: var(--panel-bg); border: 1px solid var(--panel-border); color: var(--text-main); min-width: 36px; height: 36px; padding: 0 0.5rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .page-btn:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
-        .page-btn.active { background-color: #2563eb; border-color: #2563eb; color: white; font-weight: 700; }
-        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .page-dots { color: var(--text-muted); padding: 0 0.3rem; }
+        .pagination-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 2rem 0 1rem;
+        }
 
-        /* MODAL WITH DUAL MODE (STATIC VS TRADINGVIEW INTERACTIVE) */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; user-select: none; }
-        .modal.active { display: flex; }
-        .modal-content-wrap { position: relative; width: 92vw; max-width: 1400px; height: 80vh; display: flex; justify-content: center; align-items: center; }
-        .modal-img { max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 40px rgba(0, 0, 0, 0.9); border: 1px solid var(--panel-border); object-fit: contain; }
-        
-        #tv-interactive-container { width: 100%; height: 100%; border-radius: 8px; border: 1px solid var(--panel-border); display: none; }
+        .page-btn {
+            background: #111827;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 0.45rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
 
-        .modal-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 23, 42, 0.85); border: 1px solid var(--panel-border); color: white; font-size: 1.6rem; padding: 0.6rem 0.9rem; border-radius: 8px; cursor: pointer; transition: background 0.2s; z-index: 1020; }
-        .modal-nav-btn:hover { background: var(--blue); color: #000; }
-        .modal-prev { left: -60px; }
-        .modal-next { right: -60px; }
-        @media (max-width: 768px) { .modal-prev { left: 10px; } .modal-next { right: 10px; } }
+        .page-btn.active {
+            background: var(--blue);
+            color: #000;
+            border-color: var(--blue);
+        }
 
-        .modal-close { position: absolute; top: 15px; right: 25px; color: white; font-size: 2.2rem; cursor: pointer; font-weight: bold; z-index: 1030; }
-        .modal-footer { margin-top: 0.8rem; display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 0.75rem; font-size: 0.92rem; z-index: 1020; }
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
 
-        .toast { position: fixed; bottom: 25px; right: 25px; background: #10b981; color: #000; font-weight: 700; padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.88rem; box-shadow: 0 5px 15px rgba(0,0,0,0.4); display: none; z-index: 2000; }
+        /* MODAL */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
 
-        [data-lang="ml"] { display: none; }
-        body.lang-ml [data-lang="en"] { display: none; }
-        body.lang-ml [data-lang="ml"] { display: inline-block; }
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid #334155;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 1100px;
+            max-height: 94vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-header {
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .modal-img {
+            width: 100%;
+            border-radius: 8px;
+            max-height: 60vh;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .modal-tv-box {
+            height: 450px;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-top { flex-direction: column; align-items: flex-start; }
+            .main-menu-nav { width: 100%; }
+            .breadth-banner { gap: 0.75rem; font-size: 0.72rem; }
+            .controls-bar { flex-direction: column; align-items: stretch; }
+            .search-box { max-width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="toast" id="toast">📋 Copied Alert to Clipboard!</div>
+    <!-- 1. HEADER & BRANDING -->
+    <header>
+        <div class="header-top">
+            <div class="brand-logo-wrap" onclick="switchMainMenu('confluence', document.querySelector('.btn-alpha'))">
+                <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" rx="22" fill="#111827"/>
+                    <path d="M22 68L38 32L54 52L68 24L78 42" stroke="#38BDF8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="78" cy="42" r="5" fill="#10B981"/>
+                </svg>
+                <div class="brand-info">
+                    <span class="brand-name">WyckoffWeb</span>
+                    <span class="brand-tagline">Visual Stock Screener</span>
+                </div>
+            </div>
 
-    <!-- 1. TOP NAVBAR -->
-    <header class="top-navbar">
-        <div class="brand-logo-wrap" onclick="switchMainMenu('outlook', document.querySelector('.main-nav-btn'))">
-            <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="100" height="100" rx="22" fill="#111827"/>
-                <path d="M22 68L38 32L54 52L68 24L78 42" stroke="#38BDF8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="78" cy="42" r="5" fill="#10B981"/>
-            </svg>
-            <span class="brand-name">WyckoffWeb</span>
-        </div>
-        <ul class="main-menu-nav">
-            <li>
-                <button class="main-nav-btn btn-rrg active" onclick="switchMainMenu('outlook', this)">
-                    <span data-lang="en">Sector Flow (RRG)</span>
-                    <span data-lang="ml">സെക്ടർ ഫ്ലോ (RRG)</span>
-                </button>
-            </li>
-            <li>
-                <button class="main-nav-btn btn-alpha" onclick="switchMainMenu('confluence', this)">
-                    <span data-lang="en">Alpha Confluence 🔥</span>
-                    <span data-lang="ml">ആൽഫാ കോൺഫ്ലുവെൻസ് 🔥</span>
-                </button>
-            </li>
-            <li>
-                <button class="main-nav-btn btn-copper" onclick="switchMainMenu('basic_swing', this)">
-                    <span data-lang="en">Classic Signals</span>
-                    <span data-lang="ml">ക്ലാസിക് സിഗ്നൽസ്</span>
-                </button>
-            </li>
-            <li>
-                <button class="main-nav-btn btn-silver" onclick="switchMainMenu('elites_scan', this)">
-                    <span data-lang="en">Legends' Signals</span>
-                    <span data-lang="ml">ലെജൻഡ്സ് സിഗ്നൽസ്</span>
-                </button>
-            </li>
-            <li>
-                <button class="main-nav-btn btn-gold" onclick="switchMainMenu('wyckoff_scans', this)">
-                    <span data-lang="en">Smart Money Signals</span>
-                    <span data-lang="ml">സ്മാർട്ട് മണി സിഗ്നൽസ്</span>
-                </button>
-            </li>
-            <li>
-                <button class="main-nav-btn btn-watchlist" onclick="switchMainMenu('favorites', this)">
-                    ⭐ <span data-lang="en">Watchlist</span><span data-lang="ml">വാച്ച്‌ലിസ്റ്റ്</span> (<span id="fav-count-badge">0</span>)
-                </button>
-            </li>
-            <li>
-                <a href="learn.html" class="main-nav-btn btn-academy">
-                    <span data-lang="en">Academy 🎓</span>
-                    <span data-lang="ml">അക്കാദമി 🎓</span>
-                </a>
-            </li>
-        </ul>
+            <ul class="main-menu-nav">
+                <li>
+                    <button class="main-nav-btn btn-alpha active" onclick="switchMainMenu('confluence', this)">
+                        🔥 <span data-lang="en">Alpha Confluence</span><span data-lang="ml">ആൽഫാ കോൺഫലവെൻസ</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="main-nav-btn btn-rrg" onclick="switchMainMenu('outlook', this)">
+                        📊 <span data-lang="en">Sector Flow (RRG)</span><span data-lang="ml">സെകടർ ഫലോ (RRG)</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="main-nav-btn btn-copper" onclick="switchMainMenu('basic_swing', this)">
+                        📈 <span data-lang="en">Classic Signals</span><span data-lang="ml">കലാസിക സിഗനൽസ</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="main-nav-btn btn-silver" onclick="switchMainMenu('elites_scan', this)">
+                        🏆 <span data-lang="en">Legends' Signals</span><span data-lang="ml">ലെജൻഡസ സിഗനൽസ</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="main-nav-btn btn-gold" onclick="switchMainMenu('wyckoff_scans', this)">
+                        ⚡ <span data-lang="en">Smart Money</span><span data-lang="ml">സമാർടട മണി</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="main-nav-btn btn-watchlist" onclick="switchMainMenu('favorites', this)">
+                        ⭐ <span data-lang="en">Watchlist</span><span data-lang="ml">വാചചലിസററ</span> (<span id="fav-count-badge">0</span>)
+                    </button>
+                </li>
+            </ul>
 
-        <div class="nav-right-actions">
             <div class="lang-switch-box">
                 <button id="btn-en" class="lang-btn active" onclick="setLanguage('en')">EN</button>
                 <button id="btn-ml" class="lang-btn" onclick="setLanguage('ml')">മലയാളം</button>
@@ -367,73 +751,43 @@
         </div>
     </header>
 
-    <!-- 2. SUBMENUS (CENTER-ALIGNED) -->
-    <div id="subnav-basic_swing" class="submenu-navbar">
-        <button class="sub-nav-btn active" onclick="filterGalleryByTag('Golden Cross Retest', this)">
-            <span data-lang="en">Golden Cross Pullback</span>
-            <span data-lang="ml">ഗോൾഡൻ ക്രോസ് പുൾബാക്ക്</span>
-        </button>
-        <button class="sub-nav-btn" onclick="filterGalleryByTag('20 EMA Pullback', this)">
-            <span data-lang="en">20 EMA Dry Pullback</span>
-            <span data-lang="ml">20 EMA ഡ്രൈ പുൾബാക്ക്</span>
-        </button>
-        <button class="sub-nav-btn" onclick="filterGalleryByTag('RSI 40 Bounce', this)">
-            <span data-lang="en">RSI 40-50 Support</span>
-            <span data-lang="ml">RSI 40-50 സപ്പോർട്ട്</span>
-        </button>
-    </div>
-
-    <div id="subnav-elites_scan" class="submenu-navbar">
-        <button class="sub-nav-btn active" onclick="filterGalleryByTag('Minervini VCP', this)">
-            <span data-lang="en">Mark Minervini VCP</span>
-            <span data-lang="ml">മാർക്ക് മിനർവിനി VCP</span>
-        </button>
-        <button class="sub-nav-btn" onclick="filterGalleryByTag('O\'Neil Cup & Handle', this)">
-            <span data-lang="en">William O'Neil Cup & Handle</span>
-            <span data-lang="ml">വില്യം ഒ'നീൽ കപ്പ് & ഹാൻഡിൽ</span>
-        </button>
-        <button class="sub-nav-btn" onclick="filterGalleryByTag('High Tight Flag', this)">
-            <span data-lang="en">Kristjan Qullamaggie HTF</span>
-            <span data-lang="ml">ക്രിസ്റ്റ്യൻ ഖുല്ലമാഗി HTF</span>
-        </button>
-        <button class="sub-nav-btn" onclick="filterGalleryByTag('Stockbee EP', this)">
-            <span data-lang="en">Pradeep Bonde (Stockbee) EP</span>
-            <span data-lang="ml">പ്രദീപ് ബോണ്ടെ (സ്റ്റോക്ക്ബീ) EP</span>
-        </button>
-    </div>
-
-    <div id="subnav-wyckoff_scans" class="submenu-navbar">
-        <button class="sub-nav-btn active" onclick="filterGalleryByTag('Phase C Spring', this)">
-            <span data-lang="en">Wyckoff Phase C: Spring & Test</span>
-            <span data-lang="ml">വൈക്കോഫ് ഫേസ് സി: സ്പ്രിംഗ് & ടെസ്റ്റ്</span>
-        </button>
-        <button class="sub-nav-btn" onclick="filterGalleryByTag('Phase D SOS', this)">
-            <span data-lang="en">Wyckoff Phase D: Sign of Strength (SOS)</span>
-            <span data-lang="ml">വൈക്കോഫ് ഫേസ് ഡി: SOS ബ്രേക്ക്ഔട്ട്</span>
-        </button>
-        <button class="sub-nav-btn" onclick="filterGalleryByTag('Phase D LPS', this)">
-            <span data-lang="en">Wyckoff Phase D: LPS Retest</span>
-            <span data-lang="ml">വൈക്കോഫ് ഫേസ് ഡി: LPS റീടെസ്റ്റ്</span>
-        </button>
-        <button class="sub-nav-btn" onclick="filterGalleryByTag('Volume Absorption', this)">
-            <span data-lang="en">Stealth Volume Absorption</span>
-            <span data-lang="ml">സ്റ്റെൽത്ത് വോളിയം അബ്സോർപ്ഷൻ</span>
-        </button>
-    </div>
-
-    <!-- 3. CONTROLS BAR (SEARCH & GRID/LIST TOGGLE) -->
-    <div class="controls-bar">
-        <div class="controls-left">
-            <input type="text" id="global-search" class="search-input" placeholder="Search ticker or setup..." onkeyup="onSearchChange()">
-            <div class="view-mode-toggles">
-                <button id="btn-grid-view" class="view-toggle-btn active" onclick="setViewMode('grid')">▦ Grid</button>
-                <button id="btn-table-view" class="view-toggle-btn" onclick="setViewMode('table')">☰ List</button>
-            </div>
+    <!-- 2. SUBMENUS -->
+    <div class="submenu-container">
+        <div id="subnav-basic_swing" class="submenu-navbar">
+            <button class="sub-nav-btn active" onclick="filterGalleryByTag('Golden Cross Retest', this)">
+                <span data-lang="en">Golden Cross Pullback</span><span data-lang="ml">ഗോൾഡൻ കരോസ പൾബാകക</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('20 EMA Pullback', this)">
+                <span data-lang="en">20 EMA Pullback</span><span data-lang="ml">20 EMA പൾബാകക</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('RSI 40-50 Support', this)">
+                <span data-lang="en">RSI 40-50 Support</span><span data-lang="ml">RSI 40-50 സപപോർടട</span>
+            </button>
         </div>
-        <span id="current-view-title" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">View: Sector Flow (RRG)</span>
+
+        <div id="subnav-elites_scan" class="submenu-navbar">
+            <button class="sub-nav-btn active" onclick="filterGalleryByTag('Minervini VCP', this)">
+                <span data-lang="en">Mark Minervini VCP</span><span data-lang="ml">മാർകക മിനർവിനി VCP</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('O\'Neil Cup & Handle', this)">
+                <span data-lang="en">William O'Neil Cup & Handle</span><span data-lang="ml">വിലയം ഒ നീല കപ & ഹാൻഡിൽ</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('Stockbee EP', this)">
+                <span data-lang="en">Pradeep Bonde (Stockbee) EP</span><span data-lang="ml">പരദീപ ബോണടെ EP</span>
+            </button>
+        </div>
+
+        <div id="subnav-wyckoff_scans" class="submenu-navbar">
+            <button class="sub-nav-btn active" onclick="filterGalleryByTag('Phase C Spring', this)">
+                <span data-lang="en">Wyckoff Phase C: Spring & Test</span><span data-lang="ml">വൈകകോഫ ഫേസ സി: സപരിംഗ</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('Phase D SOS', this)">
+                <span data-lang="en">Wyckoff Phase D: Sign of Strength</span><span data-lang="ml">വൈകകോഫ ഫേസ ഡി: SOS</span>
+            </button>
+        </div>
     </div>
 
-    <!-- 4. DAILY MARKET BREADTH BAR (POSITIONED BELOW CONTROLS) -->
+    <!-- 3. DAILY MARKET BREADTH BAR -->
     <div class="breadth-banner" id="breadth-bar">
         <div class="breadth-item">
             <span>🌐 <span data-lang="en">Market Regime:</span><span data-lang="ml">വിപണി നില:</span></span>
@@ -448,335 +802,162 @@
             <span id="breadth-200" class="breadth-val">--%</span>
         </div>
         <div class="breadth-item">
-            <span>🚀 <span data-lang="en">52W Highs:</span><span data-lang="ml">52W ഹൈസ്:</span></span>
+            <span>🚀 <span data-lang="en">52W Highs:</span><span data-lang="ml">52W ഹൈസ:</span></span>
             <span id="breadth-highs" class="breadth-val" style="color: var(--green);">--</span>
         </div>
         <div class="breadth-item">
-            <span>⚠️ <span data-lang="en">52W Lows:</span><span data-lang="ml">52W ലോസ്:</span></span>
+            <span>⚠ <span data-lang="en">52W Lows:</span><span data-lang="ml">52W ലോസ:</span></span>
             <span id="breadth-lows" class="breadth-val" style="color: var(--red);">--</span>
         </div>
     </div>
 
-    <!-- MAIN BODY CONTAINER -->
+    <!-- 4. CONTROLS TOOLBAR -->
+    <div class="controls-bar">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="filter-search" placeholder="Search ticker, tag, sector..." oninput="onSearchChange()">
+        </div>
+        <span id="current-view-title" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">View: Alpha Confluence</span>
+        <div class="view-mode-toggles">
+            <button id="btn-grid-view" class="view-toggle-btn active" onclick="setViewMode('grid')">⊞ Grid</button>
+            <button id="btn-table-view" class="view-toggle-btn" onclick="setViewMode('table')">☰ List</button>
+        </div>
+    </div>
+
+    <!-- 5. MAIN CONTENT CONTAINER -->
     <div class="container">
 
-        <!-- VIEW 1: MARKET OUTLOOK -->
-        <section id="view-outlook" class="view-section active-view">
-            <div class="section-title">
-                <span data-lang="en">Sector Rotation Matrix</span>
-                <span data-lang="ml">സെക്ടർ റൊട്ടേഷൻ മാട്രിക്സ്</span>
+        <!-- VIEW 1: SECTOR ROTATION MATRIX (RRG) -->
+        <section id="view-outlook" class="view-section">
+            <div class="section-title-wrap">
+                <div class="section-title">
+                    <span>🧭</span>
+                    <span data-lang="en">Sector Rotation Matrix</span>
+                    <span data-lang="ml">സെകടർ റൊടടേഷൻ മാടരികസ</span>
+                </div>
                 <span id="rrg-timestamp" style="font-size: 0.82rem; color: var(--text-muted);">Updated: Today</span>
             </div>
 
-            <div class="rrg-4quadrant">
-                <div class="quadrant quad-improving">
-                    <div class="quad-header" style="color: var(--blue);">
-                        <span>🔵 <span data-lang="en">IMPROVING</span><span data-lang="ml">തിരിച്ചുവരുന്നു</span></span>
-                        <span>Momentum ▲ | Strength ▼</span>
-                    </div>
-                    <div id="quad-improving-list"></div>
+            <div class="rrg-container">
+                <!-- Visual Canvas Bubble Chart -->
+                <div class="rrg-canvas-wrapper">
+                    <canvas id="rrgCanvas" width="680" height="440"></canvas>
                 </div>
-                <div class="quadrant quad-leading">
-                    <div class="quad-header" style="color: var(--green);">
-                        <span>🟢 <span data-lang="en">LEADING</span><span data-lang="ml">മുന്നേറുന്നു</span></span>
-                        <span>Momentum ▲ | Strength ▲</span>
-                    </div>
-                    <div id="quad-leading-list"></div>
-                </div>
-                <div class="quadrant quad-lagging">
-                    <div class="quad-header" style="color: var(--red);">
-                        <span>🔴 <span data-lang="en">LAGGING</span><span data-lang="ml">ദുർബലപ്പെടുന്നു</span></span>
-                        <span>Momentum ▼ | Strength ▼</span>
-                    </div>
-                    <div id="quad-lagging-list"></div>
-                </div>
-                <div class="quadrant quad-weakening">
-                    <div class="quad-header" style="color: var(--yellow);">
-                        <span>🟡 <span data-lang="en">WEAKENING</span><span data-lang="ml">ഇറങ്ങുന്നു</span></span>
-                        <span>Momentum ▼ | Strength ▲</span>
-                    </div>
-                    <div id="quad-weakening-list"></div>
-                </div>
-            </div>
 
-            <div class="outlook-desc-card">
-                <strong style="color: var(--blue); font-size: 1rem;">
-                    <span data-lang="en">Market Rotation Insights:</span>
-                    <span data-lang="ml">വിപണി വിശകലന വിവരങ്ങൾ:</span>
-                </strong><br>
-                <span data-lang="en">Sectors in <strong>Leading</strong> exhibit dominant relative strength and upside momentum. Sectors in <strong>Improving</strong> indicate early Wyckoff Phase C accumulation reversals.</span>
-                <span data-lang="ml"><strong>മുന്നേറുന്നു</strong> ക്വാഡ്രന്റിലുള്ള മേഖലകളിൽ ഉയർന്ന ഇൻസ്റ്റിറ്റിയൂഷണൽ നിക്ഷേപം കാണാം. <strong>തിരിച്ചുവരുന്നു</strong> എന്നതിലേക്ക് പ്രവേശിക്കുന്നവ പ്രാരംഭ വൈക്കോഫ് ഫേസ് സി അക്യുമുലേഷൻ കാട്ടുന്നു.</span>
-            </div>
+                <!-- Responsive Segmented Tabs -->
+                <div class="rrg-quadrant-tabs">
+                    <button class="quad-tab-btn active" data-quad="leading" onclick="switchRrgTab('leading', this)">
+                        🟢 Leading (<span id="count-leading">0</span>)
+                    </button>
+                    <button class="quad-tab-btn" data-quad="improving" onclick="switchRrgTab('improving', this)">
+                        🔵 Improving (<span id="count-improving">0</span>)
+                    </button>
+                    <button class="quad-tab-btn" data-quad="weakening" onclick="switchRrgTab('weakening', this)">
+                        🟡 Weakening (<span id="count-weakening">0</span>)
+                    </button>
+                    <button class="quad-tab-btn" data-quad="lagging" onclick="switchRrgTab('lagging', this)">
+                        🔴 Lagging (<span id="count-lagging">0</span>)
+                    </button>
+                </div>
 
-            <div class="section-title">
-                <span data-lang="en">Leading Sector Momentum Leaders</span>
-                <span data-lang="ml">മുൻനിര സെക്ടറുകളിലെ മികച്ച ഓഹരികൾ</span>
+                <!-- Sector List Feed -->
+                <div class="rrg-feed-container">
+                    <div id="rrg-active-quad-list" class="rrg-card-grid"></div>
+                </div>
             </div>
-            <div class="scan-grid" id="outlook-stocks-grid"></div>
         </section>
 
-        <!-- VIEW 2: GALLERIES -->
-        <section id="view-gallery" class="view-section">
-            <div class="section-title">
-                <span id="gallery-header-text">Chart Gallery</span>
-                <span style="font-size: 0.82rem; color: var(--text-muted);"><span id="gallery-count">0</span> <span data-lang="en">Setups Found</span><span data-lang="ml">സെറ്റപ്പുകൾ ലഭ്യമാണ്</span></span>
+        <!-- VIEW 2: SETUP GALLERY (DEFAULT) -->
+        <section id="view-gallery" class="view-section active-view">
+            <div class="section-title-wrap">
+                <div class="section-title">
+                    <span id="gallery-header-text">Alpha Confluence Setups</span>
+                </div>
+                <span style="font-size: 0.82rem; color: var(--text-muted);">
+                    <span id="gallery-count">0</span> <span data-lang="en">Setups Found</span><span data-lang="ml">സെററപപകൾ ലഭയമാണ</span>
+                </span>
             </div>
 
-            <div class="scan-grid" id="gallery-grid"></div>
+            <div class="chart-grid" id="chart-grid-container"></div>
 
-            <!-- LIST VIEW (PREVIOUSLY TABLE) -->
-            <div class="table-wrap" id="gallery-table-wrap">
+            <div class="table-wrap" id="table-view-container">
                 <table class="fin-table">
                     <thead>
                         <tr>
-                            <th class="sortable" id="th-ticker" onclick="sortTableBy('ticker')">
-                                <span data-lang="en">Ticker</span><span data-lang="ml">ഓഹരി</span>
-                                <span class="sort-icon" id="sort-icon-ticker">⇅</span>
-                            </th>
-                            <th class="sortable" id="th-confluence_score" onclick="sortTableBy('confluence_score')">
-                                <span data-lang="en">Confluence Score</span><span data-lang="ml">കോൺഫ്ലുവെൻസ് സ്കോർ</span>
-                                <span class="sort-icon" id="sort-icon-confluence_score">⇅</span>
-                            </th>
-                            <th>
-                                <span data-lang="en">Setup Trigger</span><span data-lang="ml">സെറ്റപ്പ് ട്രിഗർ</span>
-                            </th>
-                            <th class="sortable" id="th-base_age_days" onclick="sortTableBy('base_age_days')">
-                                <span data-lang="en">Base (Days)</span><span data-lang="ml">ബേസ് (ദിവസങ്ങൾ)</span>
-                                <span class="sort-icon" id="sort-icon-base_age_days">⇅</span>
-                            </th>
-                            <th class="sortable" id="th-reference_level" onclick="sortTableBy('reference_level')">
-                                <span data-lang="en">Pivot / Trigger (₹)</span><span data-lang="ml">പിവറ്റ് / ട്രിഗർ (₹)</span>
-                                <span class="sort-icon" id="sort-icon-reference_level">⇅</span>
-                            </th>
-                            <th class="sortable" id="th-pivot_support" onclick="sortTableBy('pivot_support')">
-                                <span data-lang="en">Stop / Support (₹)</span><span data-lang="ml">സ്റ്റോപ്പ് / സപ്പോർട്ട് (₹)</span>
-                                <span class="sort-icon" id="sort-icon-pivot_support">⇅</span>
-                            </th>
-                            <th>
-                                <span data-lang="en">Actions</span><span data-lang="ml">ലിങ്ക്</span>
-                            </th>
+                            <th>Ticker</th>
+                            <th>Confluence Score</th>
+                            <th>Matched Setup Signals</th>
+                            <th>Reference Support</th>
+                            <th>Pivot Pivot</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="gallery-table-body"></tbody>
+                    <tbody id="table-body-container"></tbody>
                 </table>
             </div>
-            
-            <div class="pagination-container" id="pagination-bar"></div>
+
+            <div class="pagination-bar" id="pagination-bar"></div>
         </section>
-
     </div>
 
-    <!-- FULLSCREEN MODAL (WITH INTERACTIVE TRADINGVIEW TOGGLE) -->
-    <div class="modal" id="chart-modal">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-        <div class="modal-content-wrap">
-            <button class="modal-nav-btn modal-prev" onclick="navigateModal(-1)">&#10094;</button>
-            
-            <!-- Static WebP Chart -->
-            <img src="" id="modal-img" class="modal-img" alt="Enlarged Setup Chart">
-            
-            <!-- Interactive Live TradingView Canvas -->
-            <div id="tv-interactive-container"></div>
-            
-            <button class="modal-nav-btn modal-next" onclick="navigateModal(1)">&#10095;</button>
-        </div>
-        <div class="modal-footer">
-            <span id="modal-counter" style="color: var(--text-muted); font-size: 0.85rem; font-family: 'JetBrains Mono', monospace;"></span>
-            <span id="modal-caption" style="font-weight: 700;"></span>
-            
-            <!-- Mode Switcher -->
-            <button id="modal-mode-toggle" class="action-text-btn" style="border-color: var(--blue); color: var(--blue);" onclick="toggleInteractiveMode()">⚡ Live Interactive</button>
-            
-            <button id="modal-fav-toggle" class="action-text-btn" onclick="toggleModalFav()">⭐ Favorite</button>
-            <button class="action-text-btn" onclick="triggerUniversalShareModal()">📤 <span data-lang="en">Share</span><span data-lang="ml">ഷെയർ</span></button>
-            <button class="action-text-btn" onclick="downloadModalChart()">⬇ <span data-lang="en">Download</span><span data-lang="ml">ഡൗൺലോഡ്</span></button>
-            <a href="#" id="modal-tv-btn" class="tv-btn" target="_blank" rel="noopener">📈 Interactive Chart ↗</a>
+    <!-- 6. CHART MODAL -->
+    <div class="modal" id="chart-modal" onclick="if(event.target===this) closeModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modal-ticker-title" style="color: #fff; font-size: 1.15rem;">--</h3>
+                    <div id="modal-tags" style="display:flex; gap:0.35rem; margin-top:0.25rem;"></div>
+                </div>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <img id="modal-chart-img" class="modal-img" src="" alt="Setup Chart">
+                <div id="tv-interactive-container" class="modal-tv-box" style="display:none;"></div>
+            </div>
+            <div class="card-actions" style="background:#0f172a;">
+                <button class="card-act-btn" id="modal-fav-toggle" onclick="toggleModalFav()">☆ Favorite</button>
+                <button class="card-act-btn" onclick="downloadModalChart()">⬇ Download Chart</button>
+                <button class="card-act-btn" onclick="shareModalChart()">🔗 Share Setup</button>
+            </div>
         </div>
     </div>
 
+    <!-- SCRIPT APPLICATION LOGIC -->
     <script>
-        // PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js').catch(err => console.log('SW registration error:', err));
-            });
-        }
-
-        let currentLang = localStorage.getItem('wyckoff_lang_pref') || 'en';
-        let manifestData = [];
-        let filteredDataset = [];
+        let currentLang = 'en';
+        let currentMenu = 'confluence';
+        let currentTag = 'all';
+        let viewMode = 'grid';
         let currentPage = 1;
-        let activeViewMode = 'grid';
+        let manifestData = [];
+        let rrgData = null;
+        let filteredDataset = [];
+        let currentModalIndex = 0;
+        let currentRrgTab = 'leading';
 
-        let currentSortColumn = 'confluence_score';
-        let currentSortDirection = 'desc';
-        let isInteractiveLive = false;
+        let favorites = JSON.parse(localStorage.getItem('wyckoff_favorites') || '[]');
 
         function setLanguage(lang) {
             currentLang = lang;
-            const isMalayalam = (lang === 'ml');
-            document.body.classList.toggle('lang-ml', isMalayalam);
-            
-            document.getElementById('btn-en').classList.toggle('active', !isMalayalam);
-            document.getElementById('btn-ml').classList.toggle('active', isMalayalam);
-
-            const searchInput = document.getElementById('global-search');
-            if (searchInput) {
-                searchInput.placeholder = isMalayalam 
-                    ? "ഓഹരി അല്ലെങ്കിൽ പാറ്റേൺ തിരയുക (ഉദാ: KRN, Spring)..." 
-                    : "Search ticker or setup (e.g. KRN, Spring, 90)...";
-            }
-
-            localStorage.setItem('wyckoff_lang_pref', lang);
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = (el.getAttribute('data-lang') === lang) ? 'inline' : 'none';
+            });
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-ml').classList.toggle('active', lang === 'ml');
             updateHeaderTitle();
         }
-
-        function getDynamicItemsPerPage() {
-            const w = window.innerWidth;
-            if (activeViewMode === 'table') return 25;
-            if (w >= 1920) return 20;
-            if (w >= 1440) return 16;
-            if (w >= 1024) return 12;
-            if (w >= 640)  return 10;
-            return 8;
-        }
-
-        let itemsPerPage = getDynamicItemsPerPage();
-        window.addEventListener('resize', () => {
-            const newCount = getDynamicItemsPerPage();
-            if (newCount !== itemsPerPage) {
-                itemsPerPage = newCount;
-                renderPaginatedGallery();
-            }
-        });
-
-        let currentModalIndex = 0;
-        let rrgData = null;
-        let currentMenu = 'outlook';
-        let currentTag = '';
-
-        let favorites = JSON.parse(localStorage.getItem('wyckoff_favorites') || '[]');
 
         function updateFavBadge() {
             document.getElementById('fav-count-badge').innerText = favorites.length;
         }
         updateFavBadge();
 
-        // Load Market Breadth
-        fetch('data/market_breadth.json')
-            .then(res => res.json())
-            .then(b => {
-                if (b.regime) {
-                    const regElem = document.getElementById('breadth-regime');
-                    regElem.innerText = b.regime;
-                    regElem.style.color = b.regime_color || '#10b981';
-                    document.getElementById('breadth-50').innerText = `${b.pct_above_50}%`;
-                    document.getElementById('breadth-200').innerText = `${b.pct_above_200}%`;
-                    document.getElementById('breadth-highs').innerText = b.highs_52w;
-                    document.getElementById('breadth-lows').innerText = b.lows_52w;
-                }
-            })
-            .catch(() => {});
-
-        // Load RRG Matrix
-        fetch('data/sector_rrg.json')
-            .then(res => res.json())
-            .then(data => {
-                rrgData = data;
-                if (data.timestamp) document.getElementById('rrg-timestamp').innerText = `Updated: ${data.timestamp}`;
-
-                const quads = {
-                    'LEADING': { indices: [], stocks: [] },
-                    'IMPROVING': { indices: [], stocks: [] },
-                    'WEAKENING': { indices: [], stocks: [] },
-                    'LAGGING': { indices: [], stocks: [] }
-                };
-
-                data.sectors.forEach(sec => {
-                    if (quads[sec.quadrant]) {
-                        quads[sec.quadrant].indices.push(
-                            `<div class="sec-pill">${sec.sector} <small style="color:${sec.color}">(${sec.jk_rs_ratio})</small></div>`
-                        );
-                        if (sec.stocks && sec.stocks.length) {
-                            sec.stocks.forEach(stk => {
-                                if (!quads[sec.quadrant].stocks.includes(stk)) {
-                                    quads[sec.quadrant].stocks.push(stk);
-                                }
-                            });
-                        }
-                    }
-                });
-
-                ['LEADING', 'IMPROVING', 'WEAKENING', 'LAGGING'].forEach(qName => {
-                    const qId = `quad-${qName.toLowerCase()}-list`;
-                    const container = document.getElementById(qId);
-                    if (!container) return;
-
-                    const indexHtml = quads[qName].indices.join('');
-                    const stockHtml = quads[qName].stocks.map(stk => 
-                        `<span class="stock-pill" onclick="searchFromRRG('${stk}')">${stk}</span>`
-                    ).join('');
-
-                    container.innerHTML = `
-                        <div class="quad-row-label">Indices</div>
-                        <div class="quad-indices-row">${indexHtml || '<span style="font-size:0.75rem; color:var(--text-muted);">None</span>'}</div>
-                        <div class="quad-row-label">Constituent Stocks</div>
-                        <div class="quad-stocks-row">${stockHtml || '<span style="font-size:0.75rem; color:var(--text-muted);">None</span>'}</div>
-                    `;
-                });
-
-                renderOutlookStocks();
-            })
-            .catch(err => console.error('RRG fetch error:', err));
-
-        function searchFromRRG(ticker) {
-            switchMainMenu('confluence', document.querySelectorAll('.main-nav-btn')[1]);
-            const searchInput = document.getElementById('global-search');
-            if (searchInput) {
-                searchInput.value = ticker;
-                onSearchChange();
-            }
-        }
-
-        fetch('data/confluence_manifest.json')
-            .then(res => res.json())
-            .then(data => {
-                manifestData = data;
-                renderOutlookStocks();
-            })
-            .catch(err => console.error('Manifest fetch error:', err));
-
         function setViewMode(mode) {
-            activeViewMode = mode;
+            viewMode = mode;
             document.getElementById('btn-grid-view').classList.toggle('active', mode === 'grid');
             document.getElementById('btn-table-view').classList.toggle('active', mode === 'table');
-            
-            document.getElementById('gallery-grid').style.display = mode === 'grid' ? 'grid' : 'none';
-            document.getElementById('gallery-table-wrap').style.display = mode === 'table' ? 'block' : 'none';
-            
-            itemsPerPage = getDynamicItemsPerPage();
-            renderPaginatedGallery();
-        }
-
-        function updateHeaderTitle() {
-            const isML = (currentLang === 'ml');
-            const titleMapEN = {
-                'confluence': 'Alpha Confluence High Conviction Setups',
-                'basic_swing': 'Classic Signals',
-                'elites_scan': "Legends' Signals",
-                'wyckoff_scans': 'Smart Money Signals',
-                'favorites': '⭐ Watchlist'
-            };
-            const titleMapML = {
-                'confluence': 'ആൽഫാ കോൺഫ്ലുവെൻസ് സെറ്റപ്പുകൾ',
-                'basic_swing': 'ക്ലാസിക് സിഗ്നൽസ്',
-                'elites_scan': 'ലെജൻഡ്സ് സിഗ്നൽസ്',
-                'wyckoff_scans': 'സ്മാർട്ട് മണി സിഗ്നൽസ്',
-                'favorites': '⭐ വാച്ച്‌ലിസ്റ്റ്'
-            };
-            const activeMap = isML ? titleMapML : titleMapEN;
-            document.getElementById('gallery-header-text').innerText = activeMap[currentMenu] || 'Chart Gallery';
-            document.getElementById('current-view-title').innerText = `${isML ? 'കാഴ്ച:' : 'View:'} ${activeMap[currentMenu] || 'Sector Flow (RRG)'}`;
+            document.getElementById('chart-grid-container').style.display = (mode === 'grid') ? 'grid' : 'none';
+            document.getElementById('table-view-container').style.display = (mode === 'table') ? 'block' : 'none';
         }
 
         function switchMainMenu(menuKey, btn) {
@@ -801,8 +982,7 @@
             if (subBar) {
                 subBar.classList.add('active-bar');
                 subBar.querySelectorAll('.sub-nav-btn').forEach((b, idx) => {
-                    if (idx === 0) b.classList.add('active');
-                    else b.classList.remove('active');
+                    b.classList.toggle('active', idx === 0);
                 });
             }
 
@@ -810,7 +990,7 @@
                 document.getElementById('view-outlook').classList.add('active-view');
                 document.getElementById('view-gallery').classList.remove('active-view');
                 document.getElementById('current-view-title').innerText = (currentLang === 'ml') ? 'കാഴ്ച: സെക്ടർ ഫ്ലോ (RRG)' : 'View: Sector Flow (RRG)';
-                renderOutlookStocks();
+                renderRrgSectorList();
             } else {
                 document.getElementById('view-outlook').classList.remove('active-view');
                 document.getElementById('view-gallery').classList.add('active-view');
@@ -822,10 +1002,25 @@
         function filterGalleryByTag(tag, btn) {
             currentTag = tag;
             currentPage = 1;
-            const parent = btn.parentElement;
-            parent.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if (btn && btn.parentElement) {
+                btn.parentElement.querySelectorAll('.sub-nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
             updateFilteredData();
+        }
+
+        function updateHeaderTitle() {
+            const isML = currentLang === 'ml';
+            const titleMap = {
+                'confluence': isML ? 'ആൽഫാ കോൺഫ്ലുവൻസ് സെറ്റപ്പുകൾ' : 'Alpha Confluence Setups',
+                'basic_swing': isML ? 'ക്ലാസിക് സിഗ്നൽസ്' : 'Classic Signals',
+                'elites_scan': isML ? 'ലെജൻഡ്സ് സിഗ്നൽസ്' : "Legends' Signals",
+                'wyckoff_scans': isML ? 'സ്മാർട്ട് മണി സിഗ്നൽസ്' : 'Smart Money Signals',
+                'favorites': isML ? '⭐ വാച്ച്ലിസ്റ്റ്' : '⭐ Watchlist'
+            };
+            const title = titleMap[currentMenu] || 'Visual Screener';
+            document.getElementById('gallery-header-text').innerText = title;
+            document.getElementById('current-view-title').innerText = `${isML ? 'കാഴ്ച:' : 'View:'} ${title}`;
         }
 
         function onSearchChange() {
@@ -833,417 +1028,309 @@
             updateFilteredData();
         }
 
-        function sortTableBy(columnKey) {
-            if (currentSortColumn === columnKey) {
-                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                currentSortColumn = columnKey;
-                currentSortDirection = (columnKey === 'ticker') ? 'asc' : 'desc';
-            }
-
-            document.querySelectorAll('.fin-table th.sortable').forEach(th => {
-                th.classList.remove('active-sort');
-                const icon = th.querySelector('.sort-icon');
-                if (icon) icon.innerText = '⇅';
-            });
-
-            const activeTh = document.getElementById(`th-${columnKey}`);
-            if (activeTh) {
-                activeTh.classList.add('active-sort');
-                const icon = document.getElementById(`sort-icon-${columnKey}`);
-                if (icon) icon.innerText = currentSortDirection === 'asc' ? '▲' : '▼';
-            }
-
-            applySorting();
-            renderPaginatedGallery();
-        }
-
-        function applySorting() {
-            filteredDataset.sort((a, b) => {
-                let valA = a[currentSortColumn];
-                let valB = b[currentSortColumn];
-
-                if (currentSortColumn === 'ticker') {
-                    valA = valA.replace('.NS', '').toLowerCase();
-                    valB = valB.replace('.NS', '').toLowerCase();
-                    return currentSortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                } else {
-                    valA = parseFloat(valA) || 0;
-                    valB = parseFloat(valB) || 0;
-                    return currentSortDirection === 'asc' ? valA - valB : valB - valA;
-                }
-            });
-        }
-
-        function renderOutlookStocks() {
-            const grid = document.getElementById('outlook-stocks-grid');
-            if (!grid || !manifestData.length) return;
-            grid.innerHTML = '';
-
-            const topPicks = manifestData.filter(d => d.confluence_score >= 40).slice(0, 12);
-            topPicks.forEach((item, idx) => {
-                grid.innerHTML += buildCardHtml(item, idx, 'outlook');
-            });
-        }
-
         function updateFilteredData() {
-            const searchQ = document.getElementById('global-search').value.toLowerCase().trim();
+            const query = (document.getElementById('filter-search').value || '').trim().toLowerCase();
 
             filteredDataset = manifestData.filter(item => {
-                let matchesCategory = true;
-                const cleanTicker = item.ticker.replace('.NS', '');
-
                 if (currentMenu === 'favorites') {
-                    matchesCategory = favorites.includes(cleanTicker);
+                    const cleanTicker = item.ticker.replace('.NS', '');
+                    if (!favorites.includes(cleanTicker)) return false;
                 } else if (currentMenu === 'confluence') {
-                    matchesCategory = item.confluence_score >= 45;
-                } else {
-                    matchesCategory = item.tags.includes(currentTag);
+                    if ((item.confluence_score || 0) < 35) return false;
+                } else if (currentTag !== 'all') {
+                    if (!item.tags || !item.tags.some(t => t.toLowerCase().includes(currentTag.toLowerCase()))) return false;
                 }
 
-                const matchesSearch = !searchQ || 
-                    item.ticker.toLowerCase().includes(searchQ) || 
-                    item.tags.some(t => t.toLowerCase().includes(searchQ)) ||
-                    item.description.toLowerCase().includes(searchQ);
-
-                return matchesCategory && matchesSearch;
+                if (query) {
+                    const matchTicker = item.ticker.toLowerCase().includes(query);
+                    const matchTags = item.tags && item.tags.some(t => t.toLowerCase().includes(query));
+                    if (!matchTicker && !matchTags) return false;
+                }
+                return true;
             });
 
-            applySorting();
             document.getElementById('gallery-count').innerText = filteredDataset.length;
             renderPaginatedGallery();
         }
 
         function renderPaginatedGallery() {
-            const grid = document.getElementById('gallery-grid');
-            const tbody = document.getElementById('gallery-table-body');
+            const grid = document.getElementById('chart-grid-container');
+            const tbody = document.getElementById('table-body-container');
             grid.innerHTML = '';
             tbody.innerHTML = '';
 
+            const itemsPerPage = 9;
             const totalPages = Math.ceil(filteredDataset.length / itemsPerPage) || 1;
             if (currentPage > totalPages) currentPage = totalPages;
 
             const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const pageItems = filteredDataset.slice(startIndex, endIndex);
+            const pageItems = filteredDataset.slice(startIndex, startIndex + itemsPerPage);
+
+            if (pageItems.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">No setups matching the criteria.</div>`;
+                return;
+            }
 
             pageItems.forEach((item, idx) => {
                 const globalIndex = startIndex + idx;
-                grid.innerHTML += buildCardHtml(item, globalIndex, 'gallery');
-                tbody.innerHTML += buildTableRowHtml(item, globalIndex);
+                const cleanTicker = item.ticker.replace('.NS', '');
+                const isFav = favorites.includes(cleanTicker);
+                const score = item.confluence_score || 0;
+                const imgUrl = item.chart_url ? (item.chart_url.startsWith('/') ? item.chart_url.substring(1) : item.chart_url) : '';
+
+                // Card
+                grid.innerHTML += `
+                    <div class="stock-card">
+                        <div class="card-header">
+                            <span class="ticker-name">${cleanTicker}</span>
+                            <span class="score-pill ${score >= 60 ? 'fire' : ''}">Score: ${score}</span>
+                        </div>
+                        <div class="card-img-wrap" onclick="openModal(${globalIndex})">
+                            <img src="${imgUrl}" alt="${cleanTicker} Chart" loading="lazy">
+                        </div>
+                        <div class="card-tags">
+                            ${(item.tags || []).map(t => `<span class="tag-pill">${t}</span>`).join('')}
+                        </div>
+                        <div class="card-meta-row">
+                            <span>Ref: <strong>₹${item.reference_level || '--'}</strong></span>
+                            <span>Pivot: <strong>₹${item.pivot_support || '--'}</strong></span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="card-act-btn" onclick="toggleFavorite('${cleanTicker}')">${isFav ? '★ Saved' : '☆ Watchlist'}</button>
+                            <button class="card-act-btn" onclick="openModal(${globalIndex})">🔍 Inspect</button>
+                        </div>
+                    </div>
+                `;
+
+                // Table row
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${cleanTicker}</strong></td>
+                        <td><span class="score-pill">${score}</span></td>
+                        <td>${(item.tags || []).join(', ')}</td>
+                        <td>₹${item.reference_level || '--'}</td>
+                        <td>₹${item.pivot_support || '--'}</td>
+                        <td><button class="sub-nav-btn" onclick="openModal(${globalIndex})">View Chart</button></td>
+                    </tr>
+                `;
             });
 
-            renderPaginationControls(totalPages);
+            renderPagination(totalPages);
         }
 
-        function renderPaginationControls(totalPages) {
+        function renderPagination(totalPages) {
             const container = document.getElementById('pagination-bar');
             container.innerHTML = '';
-
             if (totalPages <= 1) return;
 
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn';
-            prevBtn.innerHTML = '&#10094; Prev';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => goToPage(currentPage - 1);
-            container.appendChild(prevBtn);
+            const prev = document.createElement('button');
+            prev.className = 'page-btn';
+            prev.innerText = '‹ Prev';
+            prev.disabled = currentPage === 1;
+            prev.onclick = () => { currentPage--; renderPaginatedGallery(); };
+            container.appendChild(prev);
 
-            let pages = [];
-            if (totalPages <= 7) {
-                for (let i = 1; i <= totalPages; i++) pages.push(i);
-            } else {
-                if (currentPage <= 4) {
-                    pages = [1, 2, 3, 4, 5, '...', totalPages];
-                } else if (currentPage >= totalPages - 3) {
-                    pages = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
-                } else {
-                    pages = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
-                }
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => { currentPage = i; renderPaginatedGallery(); };
+                container.appendChild(btn);
             }
 
-            pages.forEach(p => {
-                if (p === '...') {
-                    const dots = document.createElement('span');
-                    dots.className = 'page-dots';
-                    dots.innerText = '...';
-                    container.appendChild(dots);
-                } else {
-                    const btn = document.createElement('button');
-                    btn.className = `page-btn ${p === currentPage ? 'active' : ''}`;
-                    btn.innerText = p;
-                    btn.onclick = () => goToPage(p);
-                    container.appendChild(btn);
-                }
-            });
-
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn';
-            nextBtn.innerHTML = 'Next &#10095;';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => goToPage(currentPage + 1);
-            container.appendChild(nextBtn);
+            const next = document.createElement('button');
+            next.className = 'page-btn';
+            next.innerText = 'Next ›';
+            next.disabled = currentPage === totalPages;
+            next.onclick = () => { currentPage++; renderPaginatedGallery(); };
+            container.appendChild(next);
         }
 
-        function goToPage(page) {
-            currentPage = page;
-            renderPaginatedGallery();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function toggleFavorite(ticker, e) {
-            if (e) e.stopPropagation();
-            const cleanTicker = ticker.replace('.NS', '');
-            const idx = favorites.indexOf(cleanTicker);
-            if (idx > -1) {
-                favorites.splice(idx, 1);
+        function toggleFavorite(ticker) {
+            if (favorites.includes(ticker)) {
+                favorites = favorites.filter(f => f !== ticker);
             } else {
-                favorites.push(cleanTicker);
+                favorites.push(ticker);
             }
             localStorage.setItem('wyckoff_favorites', JSON.stringify(favorites));
             updateFavBadge();
+            renderPaginatedGallery();
+        }
 
-            document.querySelectorAll(`.fav-btn-${cleanTicker}`).forEach(btn => {
-                btn.classList.toggle('is-fav', favorites.includes(cleanTicker));
-                btn.innerHTML = favorites.includes(cleanTicker) ? '★' : '☆';
+        /* RRG CANVAS VISUALIZER */
+        function switchRrgTab(quadrant, btn) {
+            currentRrgTab = quadrant;
+            document.querySelectorAll('.quad-tab-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderRrgSectorList();
+        }
+
+        function drawRrgCanvas(sectors) {
+            const canvas = document.getElementById('rrgCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Quadrant Backgrounds
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.08)'; ctx.fillRect(cx, 0, cx, cy); // Leading
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.08)'; ctx.fillRect(0, 0, cx, cy); // Improving
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.08)'; ctx.fillRect(0, cy, cx, cy); // Lagging
+            ctx.fillStyle = 'rgba(245, 158, 11, 0.08)'; ctx.fillRect(cx, cy, cx, cy); // Weakening
+
+            // Crosshair
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+            ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Labels
+            ctx.font = '700 11px Inter, sans-serif';
+            ctx.fillStyle = '#38bdf8'; ctx.fillText('IMPROVING', 15, 25);
+            ctx.fillStyle = '#10b981'; ctx.fillText('LEADING', w - 75, 25);
+            ctx.fillStyle = '#ef4444'; ctx.fillText('LAGGING', 15, h - 15);
+            ctx.fillStyle = '#f59e0b'; ctx.fillText('WEAKENING', w - 90, h - 15);
+
+            sectors.forEach(s => {
+                const px = cx + (s.rs_ratio - 100) * 16;
+                const py = cy - (s.rs_momentum - 100) * 16;
+                const x = Math.max(25, Math.min(w - 25, px));
+                const y = Math.max(25, Math.min(h - 25, py));
+
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = (s.quadrant === 'leading') ? '#10b981' : (s.quadrant === 'improving' ? '#38bdf8' : (s.quadrant === 'weakening' ? '#f59e0b' : '#ef4444'));
+                ctx.fill();
+
+                ctx.font = '500 10px Inter, sans-serif';
+                ctx.fillStyle = '#e2e8f0';
+                ctx.fillText(s.name.replace('NIFTY ', ''), x + 8, y + 4);
+            });
+        }
+
+        function renderRrgSectorList() {
+            if (!rrgData || !rrgData.sectors) return;
+            const container = document.getElementById('rrg-active-quad-list');
+            const filtered = rrgData.sectors.filter(s => (s.quadrant || '').toLowerCase() === currentRrgTab);
+
+            ['leading', 'improving', 'weakening', 'lagging'].forEach(q => {
+                const count = rrgData.sectors.filter(s => (s.quadrant || '').toLowerCase() === q).length;
+                const el = document.getElementById(`count-${q}`);
+                if (el) el.innerText = count;
             });
 
-            if (currentMenu === 'favorites') updateFilteredData();
-        }
-
-        function triggerUniversalShare(ticker, tags, score, ref, support, e) {
-            if (e) e.stopPropagation();
-            const shareText = `🚀 WyckoffWeb Institutional Alert: $${ticker}\n📊 Setup: ${tags} (Score: ${score}/100)\n🎯 Trigger: ₹${ref} | Stop: ₹${support}\nExplore setup: https://www.wyckoffweb.site`;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: `WyckoffWeb Alert: $${ticker}`,
-                    text: shareText,
-                    url: 'https://www.wyckoffweb.site'
-                }).catch(() => {});
-            } else {
-                navigator.clipboard.writeText(shareText).then(() => {
-                    showToast(currentLang === 'ml' ? "📋 അലർട്ട് കോപ്പി ചെയ്തു!" : "📋 Alert Copied to Clipboard!");
-                });
-            }
-        }
-
-        function downloadChart(chartUrl, ticker, e) {
-            if (e) e.stopPropagation();
-            const a = document.createElement('a');
-            a.href = chartUrl;
-            a.download = `${ticker.replace('.NS', '')}_chart.webp`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            showToast(currentLang === 'ml' ? "⬇ ചാർട്ട് ഡൗൺലോഡ് ആകുന്നു..." : "⬇ Downloading chart...");
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2200);
-        }
-
-        function buildCardHtml(item, index, source) {
-            const cleanTicker = item.ticker.replace('.NS', '');
-            const isFav = favorites.includes(cleanTicker);
-            const tvUrl = `https://in.tradingview.com/chart/?symbol=NSE:${cleanTicker}`;
-            const imgUrl = item.chart_url.startsWith('/') ? item.chart_url.substring(1) : item.chart_url;
-            const isHighConfluence = item.confluence_score >= 80 ? 'high-confluence' : '';
-            const tagStr = item.tags.join(', ');
-
-            return `
-                <div class="scan-card ${isHighConfluence}">
-                    <button class="fav-star-btn fav-btn-${cleanTicker} ${isFav ? 'is-fav' : ''}" title="Favorite Setup" onclick="toggleFavorite('${cleanTicker}', event)">
-                        ${isFav ? '★' : '☆'}
-                    </button>
-                    <div class="img-container" onclick="openModalByIndex(${index}, '${source}')">
-                        <img src="${imgUrl}" alt="${item.ticker}" class="scan-img" loading="lazy">
+            container.innerHTML = filtered.map(s => `
+                <div class="sector-tile" onclick="filterBySector('${s.name}')">
+                    <div>
+                        <div class="sector-tile-name">${s.name}</div>
+                        <div class="sector-tile-meta">RS: ${s.rs_ratio.toFixed(1)} | Mom: ${s.rs_momentum.toFixed(1)}</div>
                     </div>
-                    <div class="scan-body">
-                        <div>
-                            <div class="card-top">
-                                <span class="ticker">${cleanTicker}</span>
-                                <span class="score-pill">Score ${item.confluence_score}</span>
-                            </div>
-                            <div class="meta">Base: ${item.base_age_days}d | Ref: ₹${item.reference_level} | Stop: ₹${item.pivot_support}</div>
-                            <div class="desc">${item.description}</div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="${tvUrl}" class="tv-btn" target="_blank" rel="noopener">📈 <span data-lang="en">Chart ↗</span><span data-lang="ml">ചാർട്ട് ↗</span></a>
-                            <div class="action-btn-group">
-                                <button class="action-text-btn" onclick="downloadChart('${imgUrl}', '${cleanTicker}', event)">⬇ <span data-lang="en">Download</span><span data-lang="ml">ഡൗൺലോഡ്</span></button>
-                                <button class="action-text-btn" onclick="triggerUniversalShare('${cleanTicker}', '${tagStr}', ${item.confluence_score}, ${item.reference_level}, ${item.pivot_support}, event)">📤 <span data-lang="en">Share</span><span data-lang="ml">ഷെയർ</span></button>
-                            </div>
-                        </div>
-                    </div>
+                    <span style="font-size:0.8rem; color:var(--blue); font-weight:700;">Setups →</span>
                 </div>
-            `;
+            `).join('');
         }
 
-        function buildTableRowHtml(item, index) {
-            const cleanTicker = item.ticker.replace('.NS', '');
-            const tvUrl = `https://in.tradingview.com/chart/?symbol=NSE:${cleanTicker}`;
-            const imgUrl = item.chart_url.startsWith('/') ? item.chart_url.substring(1) : item.chart_url;
-            const tagStr = item.tags.join(', ');
-
-            return `
-                <tr>
-                    <td style="font-weight: 800; color: white; cursor: pointer;" onclick="openModalByIndex(${index}, 'gallery')">${cleanTicker}</td>
-                    <td><span class="score-pill">${item.confluence_score}/100</span></td>
-                    <td>${tagStr}</td>
-                    <td style="font-family: 'JetBrains Mono', monospace;">${item.base_age_days} d</td>
-                    <td style="font-family: 'JetBrains Mono', monospace;">₹${item.reference_level}</td>
-                    <td style="font-family: 'JetBrains Mono', monospace; color: var(--green);">₹${item.pivot_support}</td>
-                    <td>
-                        <div style="display:flex; gap:0.4rem;">
-                            <a href="${tvUrl}" class="tv-btn" style="padding: 3px 8px; font-size: 0.74rem;" target="_blank">📈 Chart ↗</a>
-                            <button class="action-text-btn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="downloadChart('${imgUrl}', '${cleanTicker}', event)">⬇ Download</button>
-                            <button class="action-text-btn" style="padding: 3px 8px; font-size: 0.74rem;" onclick="triggerUniversalShare('${cleanTicker}', '${tagStr}', ${item.confluence_score}, ${item.reference_level}, ${item.pivot_support}, event)">📤 Share</button>
-                        </div>
-                    </td>
-                </tr>
-            `;
+        function filterBySector(sectorName) {
+            switchMainMenu('confluence', document.querySelector('.btn-alpha'));
+            const clean = sectorName.replace('NIFTY ', '').toLowerCase();
+            document.getElementById('filter-search').value = clean;
+            onSearchChange();
         }
 
-        let activeModalSource = 'gallery';
-
-        function openModalByIndex(index, source = 'gallery') {
-            activeModalSource = source;
-            isInteractiveLive = false;
-            
-            const targetList = (source === 'outlook') 
-                ? manifestData.filter(d => d.confluence_score >= 40).slice(0, 12)
-                : filteredDataset;
-
-            if (!targetList.length || index < 0 || index >= targetList.length) return;
+        /* MODAL HANDLERS */
+        function openModal(index) {
             currentModalIndex = index;
-            const item = targetList[currentModalIndex];
+            const item = filteredDataset[index];
+            if (!item) return;
+
             const cleanTicker = item.ticker.replace('.NS', '');
-            const imgUrl = item.chart_url.startsWith('/') ? item.chart_url.substring(1) : item.chart_url;
-
-            // Reset views
-            const modalImg = document.getElementById('modal-img');
-            const tvContainer = document.getElementById('tv-interactive-container');
-            modalImg.style.display = 'block';
-            modalImg.src = imgUrl;
-            tvContainer.style.display = 'none';
-            tvContainer.innerHTML = '';
-
-            document.getElementById('modal-mode-toggle').innerText = '⚡ Live Interactive';
-            document.getElementById('modal-caption').innerText = `${cleanTicker} • ${item.tags.join(', ')} | Score: ${item.confluence_score}/100`;
-            document.getElementById('modal-counter').innerText = `${currentModalIndex + 1} of ${targetList.length}`;
+            document.getElementById('modal-ticker-title').innerText = `${cleanTicker} — Confluence Score: ${item.confluence_score || 0}`;
+            document.getElementById('modal-tags').innerHTML = (item.tags || []).map(t => `<span class="tag-pill">${t}</span>`).join('');
             
-            const tvBtn = document.getElementById('modal-tv-btn');
-            tvBtn.href = `https://in.tradingview.com/chart/?symbol=NSE:${cleanTicker}`;
+            const imgUrl = item.chart_url ? (item.chart_url.startsWith('/') ? item.chart_url.substring(1) : item.chart_url) : '';
+            document.getElementById('modal-chart-img').src = imgUrl;
 
-            const favBtn = document.getElementById('modal-fav-toggle');
-            favBtn.innerText = favorites.includes(cleanTicker) ? '★ Favorited' : '☆ Favorite';
+            const isFav = favorites.includes(cleanTicker);
+            document.getElementById('modal-fav-toggle').innerText = isFav ? '★ Saved' : '☆ Watchlist';
 
             document.getElementById('chart-modal').classList.add('active');
         }
 
-        /* TOGGLE BETWEEN STATIC WEIS WAVE CHART & LIVE TRADINGVIEW CANVAS */
-        function toggleInteractiveMode() {
-            const targetList = (activeModalSource === 'outlook') 
-                ? manifestData.filter(d => d.confluence_score >= 40).slice(0, 12)
-                : filteredDataset;
-            const item = targetList[currentModalIndex];
-            const cleanTicker = item.ticker.replace('.NS', '');
-            
-            const modalImg = document.getElementById('modal-img');
-            const tvContainer = document.getElementById('tv-interactive-container');
-            const toggleBtn = document.getElementById('modal-mode-toggle');
-
-            isInteractiveLive = !isInteractiveLive;
-
-            if (isInteractiveLive) {
-                modalImg.style.display = 'none';
-                tvContainer.style.display = 'block';
-                toggleBtn.innerText = '🖼️ Static Setup';
-
-                new TradingView.widget({
-                    "autosize": true,
-                    "symbol": `NSE:${cleanTicker}`,
-                    "interval": "D",
-                    "timezone": "Asia/Kolkata",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#0f172a",
-                    "enable_publishing": false,
-                    "hide_top_toolbar": false,
-                    "save_image": false,
-                    "container_id": "tv-interactive-container"
-                });
-            } else {
-                tvContainer.style.display = 'none';
-                tvContainer.innerHTML = '';
-                modalImg.style.display = 'block';
-                toggleBtn.innerText = '⚡ Live Interactive';
-            }
-        }
-
-        function triggerUniversalShareModal() {
-            const targetList = (activeModalSource === 'outlook') 
-                ? manifestData.filter(d => d.confluence_score >= 40).slice(0, 12)
-                : filteredDataset;
-            const item = targetList[currentModalIndex];
-            const cleanTicker = item.ticker.replace('.NS', '');
-            triggerUniversalShare(cleanTicker, item.tags.join(', '), item.confluence_score, item.reference_level, item.pivot_support);
-        }
-
-        function downloadModalChart() {
-            const targetList = (activeModalSource === 'outlook') 
-                ? manifestData.filter(d => d.confluence_score >= 40).slice(0, 12)
-                : filteredDataset;
-            const item = targetList[currentModalIndex];
-            const cleanTicker = item.ticker.replace('.NS', '');
-            const imgUrl = item.chart_url.startsWith('/') ? item.chart_url.substring(1) : item.chart_url;
-            downloadChart(imgUrl, cleanTicker);
+        function closeModal() {
+            document.getElementById('chart-modal').classList.remove('active');
         }
 
         function toggleModalFav() {
-            const targetList = (activeModalSource === 'outlook') 
-                ? manifestData.filter(d => d.confluence_score >= 40).slice(0, 12)
-                : filteredDataset;
-            const item = targetList[currentModalIndex];
-            const cleanTicker = item.ticker.replace('.NS', '');
-            toggleFavorite(cleanTicker);
-            const favBtn = document.getElementById('modal-fav-toggle');
-            favBtn.innerText = favorites.includes(cleanTicker) ? '★ Favorited' : '☆ Favorite';
-        }
-
-        function navigateModal(direction) {
-            const targetList = (activeModalSource === 'outlook') 
-                ? manifestData.filter(d => d.confluence_score >= 40).slice(0, 12)
-                : filteredDataset;
-
-            let nextIndex = currentModalIndex + direction;
-            if (nextIndex < 0) nextIndex = targetList.length - 1;
-            if (nextIndex >= targetList.length) nextIndex = 0;
-            openModalByIndex(nextIndex, activeModalSource);
-        }
-
-        function closeModal() {
-            document.getElementById('chart-modal').classList.remove('active');
-            document.getElementById('tv-interactive-container').innerHTML = '';
-        }
-
-        document.addEventListener('keydown', (e) => {
-            const modal = document.getElementById('chart-modal');
-            if (modal.classList.contains('active')) {
-                if (e.key === 'ArrowLeft') navigateModal(-1);
-                if (e.key === 'ArrowRight') navigateModal(1);
-                if (e.key === 'f' || e.key === 'F') toggleModalFav();
-                if (e.key === 'Escape') closeModal();
+            const item = filteredDataset[currentModalIndex];
+            if (item) {
+                const clean = item.ticker.replace('.NS', '');
+                toggleFavorite(clean);
+                document.getElementById('modal-fav-toggle').innerText = favorites.includes(clean) ? '★ Saved' : '☆ Watchlist';
             }
-        });
+        }
 
+        function downloadModalChart() {
+            const item = filteredDataset[currentModalIndex];
+            if (item && item.chart_url) {
+                const a = document.createElement('a');
+                a.href = item.chart_url;
+                a.download = `${item.ticker}_WyckoffWeb.webp`;
+                a.click();
+            }
+        }
+
+        function shareModalChart() {
+            const item = filteredDataset[currentModalIndex];
+            if (navigator.share && item) {
+                navigator.share({
+                    title: `Wyckoff Setup: ${item.ticker}`,
+                    text: `Check out this institutional setup on ${item.ticker} with Confluence Score ${item.confluence_score}!`,
+                    url: window.location.href
+                }).catch(() => {});
+            }
+        }
+
+        /* INITIAL DATA FETCH */
         window.addEventListener('DOMContentLoaded', () => {
-            setLanguage(currentLang);
+            setLanguage('en');
+
+            // Breadth
+            fetch('data/market_breadth.json')
+                .then(r => r.json())
+                .then(b => {
+                    if (b.regime) document.getElementById('breadth-regime').innerText = b.regime;
+                    if (b.above_50_sma !== undefined) document.getElementById('breadth-50').innerText = `${b.above_50_sma}%`;
+                    if (b.above_200_sma !== undefined) document.getElementById('breadth-200').innerText = `${b.above_200_sma}%`;
+                    if (b.highs_52w !== undefined) document.getElementById('breadth-highs').innerText = b.highs_52w;
+                    if (b.lows_52w !== undefined) document.getElementById('breadth-lows').innerText = b.lows_52w;
+                }).catch(() => {});
+
+            // RRG
+            fetch('data/sector_rrg.json')
+                .then(r => r.json())
+                .then(data => {
+                    rrgData = data;
+                    if (data.timestamp) document.getElementById('rrg-timestamp').innerText = `Updated: ${data.timestamp}`;
+                    drawRrgCanvas(data.sectors || []);
+                    renderRrgSectorList();
+                }).catch(() => {});
+
+            // Manifest Data
+            fetch('data/confluence_manifest.json')
+                .then(r => r.json())
+                .then(data => {
+                    manifestData = data;
+                    updateHeaderTitle();
+                    updateFilteredData();
+                }).catch(() => {});
         });
     </script>
 </body>
