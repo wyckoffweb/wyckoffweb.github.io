@@ -754,14 +754,20 @@
     <!-- 2. SUBMENUS -->
     <div class="submenu-container">
         <div id="subnav-basic_swing" class="submenu-navbar">
-            <button class="sub-nav-btn active" onclick="filterGalleryByTag('Golden Cross Retest', this)">
-                <span data-lang="en">Golden Cross Pullback</span><span data-lang="ml">ഗോൾഡൻ കരോസ പൾബാകക</span>
+            <button class="sub-nav-btn active" onclick="filterGalleryByTag('Cup & Handle', this)">
+                <span data-lang="en">Cup & Handle</span><span data-lang="ml">കപ്പ് & ഹാൻഡിൽ</span>
             </button>
-            <button class="sub-nav-btn" onclick="filterGalleryByTag('20 EMA Pullback', this)">
-                <span data-lang="en">20 EMA Pullback</span><span data-lang="ml">20 EMA പൾബാകക</span>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('Inverse H&S', this)">
+                <span data-lang="en">Inverse Head & Shoulders</span><span data-lang="ml">ഇൻവേഴ്സ് H&S</span>
             </button>
-            <button class="sub-nav-btn" onclick="filterGalleryByTag('RSI 40-50 Support', this)">
-                <span data-lang="en">RSI 40-50 Support</span><span data-lang="ml">RSI 40-50 സപപോർടട</span>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('Ascending Triangle', this)">
+                <span data-lang="en">Ascending Triangle</span><span data-lang="ml">ട്രയാംഗിൾ ബ്രേക്ക്ഔട്ട്</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('Bull Flag', this)">
+                <span data-lang="en">Bull Flag / Pennant</span><span data-lang="ml">ബുൾ ഫ്ലാഗ്</span>
+            </button>
+            <button class="sub-nav-btn" onclick="filterGalleryByTag('Double Bottom', this)">
+                <span data-lang="en">Double Bottom (W)</span><span data-lang="ml">ഡബിൾ ബോട്ടം</span>
             </button>
         </div>
 
@@ -970,7 +976,7 @@
             document.querySelectorAll('.submenu-navbar').forEach(sb => sb.classList.remove('active-bar'));
 
             const defaultTagMap = {
-                'basic_swing': 'Golden Cross Retest',
+                'basic_swing': 'Cup & Handle',
                 'elites_scan': 'Minervini VCP',
                 'wyckoff_scans': 'Phase C Spring',
                 'confluence': 'all',
